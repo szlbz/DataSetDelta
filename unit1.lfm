@@ -1,0 +1,106 @@
+object Form1: TForm1
+  Left = 395
+  Height = 738
+  Top = 36
+  Width = 731
+  Caption = 'Form1'
+  ClientHeight = 738
+  ClientWidth = 731
+  DesignTimePPI = 144
+  OnCreate = FormCreate
+  LCLVersion = '3.0.0.3'
+  object DBGrid1: TDBGrid
+    Left = 70
+    Height = 218
+    Top = 102
+    Width = 506
+    Color = clWindow
+    Columns = <>
+    DataSource = DataSource1
+    TabOrder = 0
+  end
+  object Memo1: TMemo
+    Left = 70
+    Height = 157
+    Top = 323
+    Width = 506
+    Lines.Strings = (
+      'Memo1'
+    )
+    TabOrder = 1
+  end
+  object Button1: TButton
+    Left = 352
+    Height = 38
+    Top = 38
+    Width = 113
+    Caption = 'Button1'
+    TabOrder = 2
+    OnClick = Button1Click
+  end
+  object Button2: TButton
+    Left = 523
+    Height = 38
+    Top = 48
+    Width = 113
+    Caption = 'Button2'
+    TabOrder = 3
+    OnClick = Button2Click
+  end
+  object DBGrid2: TDBGrid
+    Left = 65
+    Height = 235
+    Top = 485
+    Width = 508
+    Color = clWindow
+    Columns = <>
+    DataSource = DataSource2
+    TabOrder = 4
+  end
+  object BufDataset1: TBufDataset
+    IndexName = 'DEFAULT_ORDER'
+    MaxIndexesCount = 4
+    FieldDefs = <    
+      item
+        Name = 'test1'
+        DataType = ftString
+        Precision = -1
+        Size = 20
+      end    
+      item
+        Name = 'test2'
+        DataType = ftInteger
+        Precision = -1
+      end>
+    Active = True
+    Left = 120
+    Top = 24
+    object BufDataset1test1: TStringField
+      FieldKind = fkData
+      FieldName = 'test1'
+      Index = 0
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+    end
+    object BufDataset1test2: TLongintField
+      FieldKind = fkData
+      FieldName = 'test2'
+      Index = 1
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+    end
+  end
+  object DataSource1: TDataSource
+    DataSet = BufDataset1
+    Left = 248
+    Top = 24
+  end
+  object DataSource2: TDataSource
+    Left = 623
+    Top = 588
+  end
+end

@@ -1,0 +1,470 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectSession>
+    <PathDelim Value="\"/>
+    <Version Value="12"/>
+    <BuildModes Active="Default"/>
+    <Units>
+      <Unit>
+        <Filename Value="project1.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="5"/>
+        <CursorPos Y="22"/>
+        <UsageCount Value="121"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="unit1.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="Form1"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="Unit1"/>
+        <TopLine Value="43"/>
+        <CursorPos Y="61"/>
+        <UsageCount Value="121"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="unit2.pas"/>
+        <UnitName Value="Unit2"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos Y="102"/>
+        <UsageCount Value="54"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\fpcsrc\packages\fcl-db\src\base\bufdataset.pas"/>
+        <UnitName Value="BufDataset"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="2741"/>
+        <CursorPos X="58" Y="2763"/>
+        <UsageCount Value="32"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\fpcsrc\packages\fcl-db\src\base\db.pas"/>
+        <UnitName Value="DB"/>
+        <EditorIndex Value="6"/>
+        <TopLine Value="97"/>
+        <CursorPos X="3" Y="113"/>
+        <UsageCount Value="49"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="C:\Users\szlbz\Desktop\Delta.pas"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="785"/>
+        <CursorPos X="5" Y="819"/>
+        <UsageCount Value="1"/>
+      </Unit>
+      <Unit>
+        <Filename Value="Delta.pas"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="103"/>
+        <CursorPos X="21" Y="117"/>
+        <UsageCount Value="28"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\fpcsrc\rtl\objpas\classes\classesh.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="2332"/>
+        <CursorPos X="3" Y="2349"/>
+        <UsageCount Value="6"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\ccr\RealThinClientSDK_v952\Lib\rtcInfo.pas"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="25"/>
+        <CursorPos X="3" Y="850"/>
+        <UsageCount Value="7"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\lazarus\components\lazreport\source\lr_dbcomponent.pas"/>
+        <UnitName Value="LR_DBComponent"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="27"/>
+        <CursorPos X="23" Y="37"/>
+        <UsageCount Value="2"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\lazarus\components\lazreport\source\lr_class.pas"/>
+        <UnitName Value="LR_Class"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="7"/>
+        <CursorPos X="61" Y="22"/>
+        <UsageCount Value="2"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\fpcsrc\packages\fcl-xml\src\xmlwrite.pp"/>
+        <UnitName Value="XMLWrite"/>
+        <EditorIndex Value="-1"/>
+        <UsageCount Value="1"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\lazarus\components\lazreport\source\lr_desgn.pas"/>
+        <ComponentName Value="frDesignerForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="LR_Desgn"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="3897"/>
+        <CursorPos X="35" Y="3907"/>
+        <UsageCount Value="1"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\ccr\RealThinClientSDK_v952\Legacy\rtcDB.pas"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="943"/>
+        <CursorPos X="11" Y="954"/>
+        <UsageCount Value="1"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\ccr\RealThinClientSDK_v952\Examples\GateChatClient\ChatHostForm.pas"/>
+        <HasResources Value="True"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="67" Y="21"/>
+        <UsageCount Value="1"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\ccr\RealThinClientSDK_v952\Examples\GateChatClient\ChatHostForm.dfm"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="195"/>
+        <CursorPos X="3" Y="215"/>
+        <UsageCount Value="1"/>
+        <DefaultSyntaxHighlighter Value="LFM"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\ccr\RealThinClientSDK_v952\Lib\rtcWinHttpSys.pas"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="1367"/>
+        <CursorPos X="9" Y="1375"/>
+        <UsageCount Value="6"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\ccr\RealThinClientSDK_v952\Lib\rtcTypes.pas"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="295"/>
+        <CursorPos X="3" Y="307"/>
+        <UsageCount Value="6"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\ccr\RealThinClientSDK_v952\Lib\rtcDB.pas"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="1779"/>
+        <CursorPos X="25" Y="952"/>
+        <UsageCount Value="18"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\lazarus\components\codetools\codetoolscfgscript.pas"/>
+        <UnitName Value="CodeToolsCfgScript"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="971"/>
+        <CursorPos X="11" Y="987"/>
+        <UsageCount Value="1"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\fpcsrc\rtl\objpas\typinfo.pp"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="1466"/>
+        <CursorPos X="3" Y="1472"/>
+        <UsageCount Value="6"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\lazarus\components\lazreport\source\lr_pars.pas"/>
+        <UnitName Value="LR_Pars"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="31"/>
+        <CursorPos X="24" Y="46"/>
+        <UsageCount Value="5"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\fpcsrc\packages\rtl-objpas\src\inc\variants.pp"/>
+        <EditorIndex Value="-1"/>
+        <UsageCount Value="6"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\fpcsrc\rtl\inc\varianth.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="119"/>
+        <CursorPos X="4" Y="69"/>
+        <UsageCount Value="5"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\fpcsrc\packages\fcl-db\src\base\fields.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="38"/>
+        <CursorPos Y="43"/>
+        <UsageCount Value="7"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\ccr\FastReport VCL 2024.1.1 Enterprise - FPC\Sources\FastLocalization\FPC\Sources\frLocalization.pas"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="15"/>
+        <CursorPos X="3" Y="30"/>
+        <UsageCount Value="2"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\ccr\FastReport VCL 2024.1.1 Enterprise - FPC\Sources\FastReport\FPC\Sources\frxClass.pas"/>
+        <ComponentName Value="frxCustomDesigner"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="23104"/>
+        <CursorPos Y="23111"/>
+        <UsageCount Value="2"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\ccr\FastReport VCL 2024.1.1 Enterprise - FPC\Sources\FastLocalization\FPC\Sources\frLanguageDefault.pas"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="12"/>
+        <CursorPos X="3" Y="22"/>
+        <UsageCount Value="2"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\ccr\FastReport VCL 2024.1.1 Enterprise - FPC\Sources\FastLocalization\FPC\Sources\frLanguageEnglish.pas"/>
+        <EditorIndex Value="-1"/>
+        <UsageCount Value="2"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\ccr\FastReport VCL 2024.1.1 Enterprise - FPC\Sources\FastLocalization\FPC\Sources\Chinese\frLanguageChinese.pas"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="10"/>
+        <CursorPos X="64" Y="38"/>
+        <UsageCount Value="2"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\ccr\FastReport VCL 2024.2.2 Enterprise - FPC\Sources\FastReport\FPC\Sources\ExportPack\frxImageConverter.pas"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="18"/>
+        <CursorPos X="25" Y="34"/>
+        <UsageCount Value="2"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\ccr\FastReport VCL 2024.2.2 Enterprise - FPC\Sources\FastReport\FPC\Sources\frxDesgn.pas"/>
+        <ComponentName Value="frxDesignerForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="7636"/>
+        <CursorPos Y="7651"/>
+        <UsageCount Value="5"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\ccr\FastReport VCL 2024.2.2 Enterprise - FPC\Sources\FastCore\FPC\Sources\frXML.pas"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="14"/>
+        <UsageCount Value="2"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\ccr\FastReport VCL 2024.2.2 Enterprise - FPC\Sources\FastReport\FPC\Sources\frxRes.pas"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="194"/>
+        <CursorPos Y="202"/>
+        <UsageCount Value="6"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\ccr\FastReport VCL 2024.2.2 Enterprise - FPC\Sources\FastCore\FPC\Sources\frResources.pas"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="188"/>
+        <CursorPos Y="208"/>
+        <UsageCount Value="6"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\ccr\FastReport VCL 2024.2.2 Enterprise - FPC\Sources\FastLocalization\FPC\Sources\Chinese\frLanguageChinese.pas"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="10"/>
+        <CursorPos X="69" Y="23"/>
+        <UsageCount Value="4"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\ccr\FastReport VCL 2024.2.2 Enterprise - FPC\Sources\FastLocalization\FPC\Sources\frLocalization.pas"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="29"/>
+        <CursorPos X="28" Y="45"/>
+        <UsageCount Value="4"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\lazarus\ide\lazarus.pp"/>
+        <UnitName Value="Lazarus"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="141"/>
+        <CursorPos Y="171"/>
+        <UsageCount Value="4"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\fpcsrc\packages\fcl-db\src\base\dataset.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="907"/>
+        <CursorPos X="3" Y="911"/>
+        <UsageCount Value="6"/>
+      </Unit>
+      <Unit>
+        <Filename Value="DataSetDelta.pas"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="3"/>
+        <TopLine Value="303"/>
+        <CursorPos X="2" Y="330"/>
+        <UsageCount Value="35"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="bufdataset.pas"/>
+        <UnitName Value="BufDataset"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="2761"/>
+        <CursorPos X="56" Y="2777"/>
+        <UsageCount Value="24"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\fpcsrc\packages\fcl-db\src\base\bufdataset_parser.pp"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="199"/>
+        <CursorPos X="21" Y="215"/>
+        <UsageCount Value="23"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="Delta--.pas"/>
+        <EditorIndex Value="4"/>
+        <CursorPos X="11"/>
+        <UsageCount Value="21"/>
+        <Loaded Value="True"/>
+      </Unit>
+    </Units>
+    <JumpHistory HistoryIndex="29">
+      <Position>
+        <Filename Value="DataSetDelta.pas"/>
+        <Caret Line="17" Column="4" TopLine="8"/>
+      </Position>
+      <Position>
+        <Filename Value="DataSetDelta.pas"/>
+        <Caret Line="16"/>
+      </Position>
+      <Position>
+        <Filename Value="DataSetDelta.pas"/>
+        <Caret Line="11" Column="3"/>
+      </Position>
+      <Position>
+        <Filename Value="DataSetDelta.pas"/>
+        <Caret Line="38" Column="25" TopLine="25"/>
+      </Position>
+      <Position>
+        <Filename Value="unit1.pas"/>
+        <Caret Line="53" Column="18" TopLine="32"/>
+      </Position>
+      <Position>
+        <Filename Value="unit1.pas"/>
+        <Caret Line="62" TopLine="38"/>
+      </Position>
+      <Position>
+        <Filename Value="DataSetDelta.pas"/>
+        <Caret Line="19" TopLine="10"/>
+      </Position>
+      <Position>
+        <Filename Value="DataSetDelta.pas"/>
+        <Caret Line="20" Column="16" TopLine="7"/>
+      </Position>
+      <Position>
+        <Filename Value="DataSetDelta.pas"/>
+        <Caret Line="16" Column="16"/>
+      </Position>
+      <Position>
+        <Filename Value="DataSetDelta.pas"/>
+        <Caret Line="15"/>
+      </Position>
+      <Position>
+        <Filename Value="DataSetDelta.pas"/>
+        <Caret Line="186" Column="23" TopLine="160"/>
+      </Position>
+      <Position>
+        <Filename Value="DataSetDelta.pas"/>
+        <Caret Line="41" TopLine="12"/>
+      </Position>
+      <Position>
+        <Filename Value="DataSetDelta.pas"/>
+        <Caret Line="15" Column="24" TopLine="3"/>
+      </Position>
+      <Position>
+        <Filename Value="DataSetDelta.pas"/>
+        <Caret Line="234" Column="27" TopLine="218"/>
+      </Position>
+      <Position>
+        <Filename Value="DataSetDelta.pas"/>
+        <Caret Line="240" Column="13" TopLine="224"/>
+      </Position>
+      <Position>
+        <Filename Value="DataSetDelta.pas"/>
+        <Caret Line="47" TopLine="31"/>
+      </Position>
+      <Position>
+        <Filename Value="DataSetDelta.pas"/>
+        <Caret Line="235" Column="22" TopLine="227"/>
+      </Position>
+      <Position>
+        <Filename Value="DataSetDelta.pas"/>
+        <Caret Line="40" Column="30" TopLine="16"/>
+      </Position>
+      <Position>
+        <Filename Value="DataSetDelta.pas"/>
+        <Caret Line="257" Column="45" TopLine="301"/>
+      </Position>
+      <Position>
+        <Filename Value="DataSetDelta.pas"/>
+        <Caret Line="232" Column="44" TopLine="216"/>
+      </Position>
+      <Position>
+        <Filename Value="DataSetDelta.pas"/>
+        <Caret Line="239" Column="23" TopLine="223"/>
+      </Position>
+      <Position>
+        <Filename Value="DataSetDelta.pas"/>
+        <Caret Line="240" Column="20" TopLine="224"/>
+      </Position>
+      <Position>
+        <Filename Value="DataSetDelta.pas"/>
+        <Caret Line="235" Column="5" TopLine="224"/>
+      </Position>
+      <Position>
+        <Filename Value="DataSetDelta.pas"/>
+        <Caret Line="240" Column="20" TopLine="224"/>
+      </Position>
+      <Position>
+        <Filename Value="DataSetDelta.pas"/>
+        <Caret Line="241" Column="36" TopLine="224"/>
+      </Position>
+      <Position>
+        <Filename Value="DataSetDelta.pas"/>
+        <Caret Line="246" Column="20" TopLine="231"/>
+      </Position>
+      <Position>
+        <Filename Value="DataSetDelta.pas"/>
+        <Caret Line="267" Column="43" TopLine="251"/>
+      </Position>
+      <Position>
+        <Filename Value="DataSetDelta.pas"/>
+        <Caret Line="275" Column="40" TopLine="256"/>
+      </Position>
+      <Position>
+        <Filename Value="DataSetDelta.pas"/>
+        <Caret Line="271" Column="25" TopLine="256"/>
+      </Position>
+      <Position>
+        <Filename Value="DataSetDelta.pas"/>
+        <Caret Line="281" Column="5" TopLine="301"/>
+      </Position>
+    </JumpHistory>
+    <RunParams>
+      <FormatVersion Value="2"/>
+      <Modes ActiveMode=""/>
+    </RunParams>
+  </ProjectSession>
+</CONFIG>
