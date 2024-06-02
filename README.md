@@ -1,0 +1,3 @@
+为lazarus增加类似TClientDataSet的Delta功能
+
+适用于所有TDataSet
