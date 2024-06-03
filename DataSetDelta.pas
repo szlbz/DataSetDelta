@@ -1,3 +1,19 @@
+{*******************************************************}
+{                                                       }
+{ 为lazarus TDataSet增加类似TClientDataSet的Delta功能   }
+{                    适用于所有TDataSet                 }
+{               只需在unit的uses添加DataSetDelta        }
+{ BufDataset1.ActivateMonitoring(true)//启动Delta功能   }
+{ BufDataset1.GetActionSQL('test');//根据Delta生成SQL   }
+{                                                       }
+{               Copyright(c) 2024-2024                  }
+{              秋风(QQ315795176)原创出品                }
+{                                                       }
+{                 All rights reserved                   }
+{                     保留所有权利                      }
+{                                                       }
+{*******************************************************}
+
 unit DataSetDelta;
 
 {$mode objfpc}{$H+}
@@ -306,6 +322,7 @@ begin
       FOldDataSet.Next;
       FNewDataSet.Next;
     end;
+
     FNewDataSet.Clear;
     FOldDataSet.Clear;
     FNewDataSet.Free;
