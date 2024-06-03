@@ -19,9 +19,7 @@ type
     Button1: TButton;
     Button2: TButton;
     DataSource1: TDataSource;
-    DataSource2: TDataSource;
     DBGrid1: TDBGrid;
-    DBGrid2: TDBGrid;
     Memo1: TMemo;
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
@@ -47,25 +45,17 @@ begin
 end;
 
 procedure TForm1.Button2Click(Sender: TObject);
-var
-  s:string;
+var sql:string;
 begin
-  if BufDataset1.ChangesDataSet<>nil then
-  begin
-    memo1.Lines.Add(BufDataset1.ChangesDataSet.RecordCount.ToString);
-
-    if BufDataset1.ChangesDataSet.FieldByName('NewValues').DataType=ftString then
-      memo1.Lines.Add('NewValues='+BufDataset1.ChangesDataSet.FieldByName('NewValues').AsString);
-    if BufDataset1.ChangesDataSet.FieldByName('NewValues').DataType=ftInteger then
-      memo1.Lines.Add('NewValues='+BufDataset1.ChangesDataSet.FieldByName('NewValues').AsInteger.ToString);
-  end;
+  sql:=BufDataset1.GetActionSQL('test');
+  if sql<>'' then
+    memo1.Lines.Add(sql);
 end;
 
 procedure TForm1.FormCreate(Sender: TObject);
 begin
+  memo1.Lines.Clear;
   BufDataset1.ActivateMonitoring(true);
-  if BufDataset1.ChangesDataSet<>nil then
-     DataSource2.DataSet:=BufDataset1.ChangesDataSet;
 end;
 
 end.

@@ -2,18 +2,17 @@ object Form1: TForm1
   Left = 395
   Height = 738
   Top = 36
-  Width = 731
+  Width = 864
   Caption = 'Form1'
   ClientHeight = 738
-  ClientWidth = 731
+  ClientWidth = 864
   DesignTimePPI = 144
   OnCreate = FormCreate
-  LCLVersion = '3.0.0.3'
   object DBGrid1: TDBGrid
     Left = 70
     Height = 218
     Top = 102
-    Width = 506
+    Width = 730
     Color = clWindow
     Columns = <>
     DataSource = DataSource1
@@ -21,41 +20,31 @@ object Form1: TForm1
   end
   object Memo1: TMemo
     Left = 70
-    Height = 157
-    Top = 323
-    Width = 506
+    Height = 218
+    Top = 368
+    Width = 730
     Lines.Strings = (
       'Memo1'
     )
     TabOrder = 1
   end
   object Button1: TButton
-    Left = 352
+    Left = 496
     Height = 38
-    Top = 38
+    Top = 32
     Width = 113
     Caption = 'Button1'
     TabOrder = 2
     OnClick = Button1Click
   end
   object Button2: TButton
-    Left = 523
+    Left = 96
     Height = 38
-    Top = 48
-    Width = 113
-    Caption = 'Button2'
+    Top = 16
+    Width = 217
+    Caption = 'Delta生成SQL'
     TabOrder = 3
     OnClick = Button2Click
-  end
-  object DBGrid2: TDBGrid
-    Left = 65
-    Height = 235
-    Top = 485
-    Width = 508
-    Color = clWindow
-    Columns = <>
-    DataSource = DataSource2
-    TabOrder = 4
   end
   object BufDataset1: TBufDataset
     IndexName = 'DEFAULT_ORDER'
@@ -98,9 +87,5 @@ object Form1: TForm1
     DataSet = BufDataset1
     Left = 248
     Top = 24
-  end
-  object DataSource2: TDataSource
-    Left = 623
-    Top = 588
   end
 end
