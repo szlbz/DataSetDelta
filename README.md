@@ -3,3 +3,4 @@
 适用于所有TDataSet  
 只需在unit的uses添加DataSetDelta  
  BufDataset1.ActivateMonitoring(true)//启动Delta功能  
+ BufDataset1.GetActionSQL('test');//根据Delta生成SQL     
