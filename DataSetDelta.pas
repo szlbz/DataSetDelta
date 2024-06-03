@@ -196,7 +196,6 @@ function TDataSetChangesHelper.GetActionSQL(const ATableName
 var
   nFldOrder: integer;
   cFldName, s1, s2: String;
-  ndb, odb: TBufDataSet;
 
   function SQLValue(const ARow: TBufDataSet; AOrder: Integer): String;
   var
@@ -251,70 +250,70 @@ begin
   Result := '';
   if (FNewDataSet.RecordCount>0) then
   begin
-    ndb := FNewDataSet;
-    odb := FOldDataSet;
-    ndb.First;
-    odb.First;
-    while not odb.EOF do
+    FNewDataSet.First;
+    FOldDataSet.First;
+    while not FOldDataSet.EOF do
     begin
-      if odb.FieldByName('DataState').AsString.ToUpper='INSERTED' then
+      if FOldDataSet.FieldByName('DataState').AsString.ToUpper='INSERTED' then
       begin
         s1 := '';
         s2 := '';
-        for nFldOrder := 0 to ndb.FieldCount - 1 do
+        for nFldOrder := 0 to FNewDataSet.FieldCount - 1 do
         begin
-          cFldName := ndb.Fields[nFldOrder].FieldName;
+          cFldName := FNewDataSet.Fields[nFldOrder].FieldName;
           if cFldName<>'DataState' then
           begin
-            if not ndb.Fields[nFldOrder].IsNull then
+            if not FNewDataSet.Fields[nFldOrder].IsNull then
             begin
               if s1 <> '' then
                   s1 := s1 + ',';
               if s2 <> '' then
                   s2 := s2 + ',';
               s1 := s1 + cFldName;
-              s2 := s2 + SQLValue(ndb, nFldOrder);
+              s2 := s2 + SQLValue(FNewDataSet, nFldOrder);
             end;
           end;
         end;
         Result :=Result+ 'INSERT INTO ' + ATableName + ' (' + s1 + ')' +
           ' VALUES (' + s2 + ')'+chr(#13)+chr(#10);
       end;
-      if odb.FieldByName('DataState').AsString.ToUpper='Updated'.ToUpper then
+      if FOldDataSet.FieldByName('DataState').AsString.ToUpper='Updated'.ToUpper then
       begin
         s2 := '';
-        for nFldOrder := 0 to ndb.FieldCount - 1 do
+        for nFldOrder := 0 to FNewDataSet.FieldCount - 1 do
         begin
-          cFldName := ndb.Fields[nFldOrder].FieldName;
+          cFldName := FNewDataSet.Fields[nFldOrder].FieldName;
           if cFldName<>'DataState' then
           begin
-            if odb.FieldByName(cFldName).AsVariant <> ndb.FieldByName(cFldName).AsVariant then
+            if FOldDataSet.FieldByName(cFldName).AsVariant <> FNewDataSet.FieldByName(cFldName).AsVariant then
             begin
               if s2 <> '' then
                   s2 := s2 + ', ';
-              if ndb.FieldByName(cFldName).IsNull then
+              if FNewDataSet.FieldByName(cFldName).IsNull then
                   s2 := s2 + cFldName + ' = NULL'
               else
-                  s2 := s2 + cFldName + ' = ' + SQLValue(ndb, nFldOrder);
+                  s2 := s2 + cFldName + ' = ' + SQLValue(FNewDataSet, nFldOrder);
             end;
           end;
         end;
         Result :=Result+ 'UPDATE ' + ATableName + ' SET ' + s2 +
-          ' WHERE ' + MakeWhere(odb)+chr(#13)+chr(#10);
+          ' WHERE ' + MakeWhere(FOldDataSet)+chr(#13)+chr(#10);
       end;
-      if odb.FieldByName('DataState').AsString.ToUpper='Delete'.ToUpper then
+      if FOldDataSet.FieldByName('DataState').AsString.ToUpper='Deleted'.ToUpper then
       begin
-        Result :=Result+ 'DELETE FROM ' + ATableName + ' WHERE ' + MakeWhere(odb)+chr(#13)+chr(#10);
+        Result :=Result+ 'DELETE FROM ' + ATableName + ' WHERE ' + MakeWhere(FNewDataSet)+chr(#13)+chr(#10);
       end;
-      odb.Next;
-      ndb.Next;
+      FOldDataSet.Next;
+      FNewDataSet.Next;
     end;
-    ndb.Clear;
-    odb.Clear;
+    FNewDataSet.Clear;
+    FOldDataSet.Clear;
     FNewDataSet.Free;
     FOldDataSet.Free;
     createTable;
-  end;
+    Foldvalue:=nil;
+    setlength(Foldvalue,self.Fields.Count);
+ end;
 end;
 
 end.
