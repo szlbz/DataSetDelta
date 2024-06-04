@@ -26,9 +26,6 @@
     </RunParams>
     <RequiredPackages>
       <Item>
-        <PackageName Value="rtcsdk_fpc"/>
-      </Item>
-      <Item>
         <PackageName Value="FCL"/>
       </Item>
       <Item>
