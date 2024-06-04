@@ -1,7 +1,7 @@
 lazarus自带的bufDataSet和MemDataSet缺少类似TClientDataSet的Delta功能，这个单元从TDataSet扩展了Delta，适用于所有TDataSet。  
 使用方法：  
 1、在unit的uses添加DataSetDelta  
-2、xxxDataSet.ActivateMonitoring(true)//true--启动Delta功能  false--停止Delta
+2、xxxDataSet.ActivateMonitoring(true)//true--启动Delta功能  false--停止Delta  
 3、xxxDataSet.GetActionSQL(const ATableName: String; const AKeyFields: String = '');//根据Delta生成SQL  
 注意：  
 使用GetActionSQL后会清空Delta的记录。  
