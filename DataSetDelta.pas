@@ -2,9 +2,7 @@
 {                                                       }
 { 为lazarus TDataSet增加类似TClientDataSet的Delta功能   }
 {                    适用于所有TDataSet                 }
-{               只需在unit的uses添加DataSetDelta        }
-{ BufDataset1.ActivateMonitoring(true)//启动Delta功能   }
-{ BufDataset1.GetActionSQL('test');//根据Delta生成SQL   }
+{                                                       }
 {                                                       }
 {               Copyright(c) 2024-2024                  }
 {              秋风(QQ315795176)原创出品                }
@@ -26,39 +24,70 @@ uses
 type
 
   TDataStateValue = (dsvOriginal, dsvDeleted, dsvInserted, dsvUpdated);
+  TDataStateValues=set of TDataStateValue;
 
-  TDataSetChangesHelper =class Helper for TDataset
+  TDataSetChangesMonitor =class(TComponent)
   private
-    procedure CreateTable;
+    FDataState:TDataStateValue;
+    Foldvalue:array of Variant;
+    FBeforeEdit: TDataSetNotifyEvent;
+    FBeforeDelete: TDataSetNotifyEvent;
+    FBeforeInsert: TDataSetNotifyEvent;
+    FAfterPost: TDataSetNotifyEvent;
+    FNewDataSet:TBufDataSet;
+    FOldDataSet:TBufDataSet;
+    FDataSet:TDataSet;
+    procedure CreateMonitorDataSet;
+    procedure SetDataSet(AValue: TDataSet);
     procedure BeforeInserts(DataSet: TDataSet);
     procedure BeforeEdits(DataSet: TDataSet);
     procedure BeforeDeletes(DataSet:TDataSet);
     procedure AfterPosts(DataSet: TDataSet);
     function GetChangedCount:int64;
   public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
     function GetActionSQL(const ATableName : String; const AKeyFields: String = ''): String;
-    procedure ActivateMonitoring(Value:Boolean);
+    procedure ActivateMonitoring(AValue:Boolean =true);
     property ChangedCount:int64 read GetChangedCount;
+    property DataSet:TDataSet read FDataSet write SetDataSet;
   end;
 
 implementation
 
-var
-  FDataState:string;
-  Foldvalue:array of Variant;
-  FBeforeEdit: TDataSetNotifyEvent;
-  FBeforeDelete: TDataSetNotifyEvent;
-  FBeforeInsert: TDataSetNotifyEvent;
-  FAfterPost: TDataSetNotifyEvent;
-  FNewDataSet:TBufDataSet;
-  FOldDataSet:TBufDataSet;
+constructor TDataSetChangesMonitor.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+end;
 
-function TDataSetChangesHelper.GetChangedCount:int64;
+destructor TDataSetChangesMonitor.Destroy;
+begin
+  inherited Destroy;
+  FBeforeEdit:=nil;
+  FBeforeDelete:=nil;
+  FBeforeInsert:=nil;
+  FAfterPost:=nil;
+  Foldvalue:=nil;
+  if Assigned(FNewDataSet) then
+    freeandnil(FNewDataSet);
+  if Assigned(FOldDataSet) then
+    freeandnil(FOldDataSet);
+end;
+
+function TDataSetChangesMonitor.GetChangedCount:int64;
 begin
   Result:=FOldDataSet.RecordCount;
 end;
 
-procedure TDataSetChangesHelper.CreateTable;
+procedure TDataSetChangesMonitor.SetDataSet(AValue: TDataSet);
+begin
+  if (AValue <> FDataSet) then
+  begin
+    FDataSet:=AValue;
+  end;
+end;
+
+procedure TDataSetChangesMonitor.CreateMonitorDataSet;
 var
   i:integer;
   LFieldName, LFieldType: string;
@@ -70,67 +99,63 @@ begin
     freeandnil(FOldDataSet);
 
   FNewDataSet:=TBufDataSet.Create(nil);
-  for I := 0 to Self.FieldCount - 1 do
+  for I := 0 to FDataSet.FieldCount - 1 do
   begin
-    LFieldName := Self.Fields[I].FieldName;
-    LFieldType := GetEnumName(TypeInfo(TFieldType), Integer(Self.Fields[I].DataType));
-    LFieldSize := Self.Fields[I].DataSize;
+    LFieldName := FDataSet.Fields[I].FieldName;
+    LFieldType := GetEnumName(TypeInfo(TFieldType), Integer(FDataSet.Fields[I].DataType));
+    LFieldSize := FDataSet.Fields[I].DataSize;
     if (LFieldType = 'ftString') then
       FNewDataSet.FieldDefs.Add(LFieldName, TFieldType(GetEnumValue(TypeInfo(TFieldType), LFieldType)), LFieldSize)
     else
       FNewDataSet.FieldDefs.Add(LFieldName, TFieldType(GetEnumValue(TypeInfo(TFieldType), LFieldType)));
   end;
-  FNewDataSet.FieldDefs.Add('DataState', TFieldType(GetEnumValue(TypeInfo(TFieldType), 'ftString')), 30);
-  FNewDataSet.FieldDefs.Add('DataSetName', TFieldType(GetEnumValue(TypeInfo(TFieldType), 'ftString')), 30);
+  FNewDataSet.FieldDefs.Add('DataState', TFieldType(GetEnumValue(TypeInfo(TFieldType), 'ftinteger')));
   FNewDataSet.CreateDataset;
 
   FOldDataSet:=TBufDataSet.Create(nil);
-  for I := 0 to Self.FieldCount - 1 do
+  for I := 0 to FDataSet.FieldCount - 1 do
   begin
-    LFieldName := Self.Fields[I].FieldName;
-    LFieldType := GetEnumName(TypeInfo(TFieldType), Integer(Self.Fields[I].DataType));
-    LFieldSize := Self.Fields[I].DataSize;
+    LFieldName := FDataSet.Fields[I].FieldName;
+    LFieldType := GetEnumName(TypeInfo(TFieldType), Integer(FDataSet.Fields[I].DataType));
+    LFieldSize := FDataSet.Fields[I].DataSize;
     if (LFieldType = 'ftString')  then
       FOldDataSet.FieldDefs.Add(LFieldName, TFieldType(GetEnumValue(TypeInfo(TFieldType), LFieldType)), LFieldSize)
     else
       FOldDataSet.FieldDefs.Add(LFieldName, TFieldType(GetEnumValue(TypeInfo(TFieldType), LFieldType)));
   end;
-  FOldDataSet.FieldDefs.Add('DataState', TFieldType(GetEnumValue(TypeInfo(TFieldType), 'ftString')), 30);
-  FOldDataSet.FieldDefs.Add('DataSetName', TFieldType(GetEnumValue(TypeInfo(TFieldType), 'ftString')), 30);
+  FOldDataSet.FieldDefs.Add('DataState', TFieldType(GetEnumValue(TypeInfo(TFieldType), 'ftinteger')));
   FOldDataSet.CreateDataset;
 end;
 
-procedure TDataSetChangesHelper.BeforeInserts(DataSet: TDataSet);
+procedure TDataSetChangesMonitor.BeforeInserts(DataSet: TDataSet);
 var
   i:integer;
 begin
   if Foldvalue<>nil then
   begin
-    FDataState:='Inserted';
+    FDataState:=dsvInserted;
     for i:=0 to DataSet.Fields.Count-1 do
       Foldvalue[i]:=null;
-    Foldvalue[DataSet.Fields.Count]:=self.Name;
   end;
 end;
 
-procedure TDataSetChangesHelper.BeforeEdits(DataSet: TDataSet);
+procedure TDataSetChangesMonitor.BeforeEdits(DataSet: TDataSet);
 var
   i:integer;
 begin
   if Foldvalue<>nil then
   begin
-    FDataState:='Updated';
+    FDataState:=dsvUpdated;
     for i:=0 to DataSet.Fields.Count-1 do
       Foldvalue[i]:=DataSet.Fields[i].NewValue;
-    Foldvalue[DataSet.Fields.Count]:=self.Name;
   end;
 end;
 
-procedure TDataSetChangesHelper.BeforeDeletes(DataSet: TDataSet);
+procedure TDataSetChangesMonitor.BeforeDeletes(DataSet: TDataSet);
 var
   i:integer;
 begin
-  FDataState:='Deleted';
+  FDataState:=dsvDeleted;
   if Foldvalue<>nil then
   begin
     FNewDataSet.Append;
@@ -140,15 +165,13 @@ begin
       FNewDataSet.Fields[i].Value := DataSet.Fields[i].NewValue;
       FOldDataSet.Fields[i].Value := null;
     end;
-    FOldDataSet.FieldByName('DataState').AsString:=FDataState;
-    FNewDataSet.FieldByName('DataSetName').AsString:=self.Name;
-    FOldDataSet.FieldByName('DataSetName').AsString:=self.Name;
+    FOldDataSet.FieldByName('DataState').Asinteger:=ord(FDataState);
     FOldDataSet.Post;
     FNewDataSet.Post;
   end;
 end;
 
-procedure TDataSetChangesHelper.AfterPosts(DataSet: TDataSet);
+procedure TDataSetChangesMonitor.AfterPosts(DataSet: TDataSet);
 var
   i:integer;
   s:string;
@@ -161,41 +184,33 @@ begin
     begin
       FNewDataSet.Fields[i].Value := DataSet.Fields[i].NewValue;
       FOldDataSet.Fields[i].Value := Foldvalue[i];
-      FOldDataSet.FieldByName('DataState').AsString:=FDataState;
-      FNewDataSet.FieldByName('DataSetName').AsString:=self.Name;
-      FOldDataSet.FieldByName('DataSetName').AsString:=self.Name;
+      FOldDataSet.FieldByName('DataState').Asinteger:=ord(FDataState);
     end;
     FNewDataSet.Post;
     FOldDataSet.Post;
   end;
 end;
 
-procedure TDataSetChangesHelper.ActivateMonitoring(Value:Boolean);
-var
-  FieldDef: TFieldDefs;
+procedure TDataSetChangesMonitor.ActivateMonitoring(AValue:Boolean =true);
 begin
-  if Value then
+  if AValue then
   begin
     if not (csDesigning in ComponentState) then
     begin
-      setlength(Foldvalue,self.Fields.Count+1);
-      FBeforeEdit:=self.BeforeEdit;
-      FBeforeDelete:=self.BeforeDelete;
-      FBeforeInsert:=self.BeforeInsert;
-      FAfterPost:=self.AfterPost;
-      self.BeforeEdit:=@BeforeEdits;
-      self.BeforeDelete:=@BeforeDeletes;
-      self.BeforeInsert:=@BeforeInserts;
-      self.AfterPost:=@AfterPosts;
-      CreateTable;
+      FBeforeEdit:=FDataSet.BeforeEdit;
+      FBeforeDelete:=FDataSet.BeforeDelete;
+      FBeforeInsert:=FDataSet.BeforeInsert;
+      FAfterPost:=FDataSet.AfterPost;
+      FDataSet.BeforeEdit:=@BeforeEdits;
+      FDataSet.BeforeDelete:=@BeforeDeletes;
+      FDataSet.BeforeInsert:=@BeforeInserts;
+      FDataSet.AfterPost:=@AfterPosts;
+      setlength(Foldvalue,FDataSet.Fields.Count);
+      CreateMonitorDataSet;
     end;
   end
   else
   begin
-    self.BeforeEdit:=FBeforeEdit;
-    self.BeforeDelete:=FBeforeDelete;
-    self.BeforeInsert:=FBeforeInsert;
-    self.AfterPost:=FAfterPost;
     FBeforeEdit:=nil;
     FBeforeDelete:=nil;
     FBeforeInsert:=nil;
@@ -208,7 +223,7 @@ begin
   end;
 end;
 
-function TDataSetChangesHelper.GetActionSQL(const ATableName
+function TDataSetChangesMonitor.GetActionSQL(const ATableName
   : String; const AKeyFields: String = ''): String;
 var
   nFldOrder: integer;
@@ -219,7 +234,7 @@ var
     cName, cValue: String;
     eType: TFieldType;
   begin
-    cName := ADataSet.Fields[AOrder].FieldName;
+    //cName := ADataSet.Fields[AOrder].FieldName;
     eType := ADataSet.Fields[AOrder].DataType;
     cValue := ADataSet.Fields[AOrder].Value;
     if eType in [ftString, ftDate, ftTime, ftDateTime,
@@ -249,7 +264,7 @@ var
     for i := 0 to ADataSet.FieldCount - 1 do
     begin
       cFldName := ADataSet.Fields[i].FieldName;
-      if (cFldName<>'DataState') and (cFldName<>'DataSetName') then
+      if (cFldName<>'DataState') then
       begin
         if (cKeyFields = ',') or (Pos(cFldName + ',', cKeyFields) > 0) then
         begin
@@ -273,82 +288,65 @@ begin
       FOldDataSet.First;
       while not FOldDataSet.EOF do
       begin
-        if UpperCase(FOldDataSet.FieldByName('DataSetName').AsString)=UpperCase(self.name) then
+        //INSERTED
+        if FOldDataSet.FieldByName('DataState').Asinteger =ord(dsvINSERTED) then
         begin
-          //INSERTED
-          if FOldDataSet.FieldByName('DataState').AsString.ToUpper='INSERTED' then
+          s1 := '';
+          s2 := '';
+          for nFldOrder := 0 to FNewDataSet.FieldCount - 1 do
           begin
-            s1 := '';
-            s2 := '';
-            for nFldOrder := 0 to FNewDataSet.FieldCount - 1 do
+            cFldName := FNewDataSet.Fields[nFldOrder].FieldName;
+            if (cFldName<>'DataState')  then
             begin
-              cFldName := FNewDataSet.Fields[nFldOrder].FieldName;
-              if (cFldName<>'DataState') and (cFldName<>'DataSetName') then
+              if not FNewDataSet.Fields[nFldOrder].IsNull then
               begin
-                if not FNewDataSet.Fields[nFldOrder].IsNull then
-                begin
-                  if s1 <> '' then
-                      s1 := s1 + ',';
-                  if s2 <> '' then
-                      s2 := s2 + ',';
-                  s1 := s1 + cFldName;
-                  s2 := s2 + SQLValue(FNewDataSet, nFldOrder);
-                end;
+                if s1 <> '' then
+                    s1 := s1 + ',';
+                if s2 <> '' then
+                    s2 := s2 + ',';
+                s1 := s1 + cFldName;
+                s2 := s2 + SQLValue(FNewDataSet, nFldOrder);
               end;
             end;
-            Result :=Result+ 'INSERT INTO ' + ATableName + ' (' + s1 + ')' +
-              ' VALUES (' + s2 + ')'+LineEnding;
           end;
-          //Updated
-          if FOldDataSet.FieldByName('DataState').AsString.ToUpper='Updated'.ToUpper then
-          begin
-            s2 := '';
-            for nFldOrder := 0 to FNewDataSet.FieldCount - 1 do
-            begin
-              cFldName := FNewDataSet.Fields[nFldOrder].FieldName;
-              if (cFldName<>'DataState') and (cFldName<>'DataSetName') then
-              begin
-                if FOldDataSet.FieldByName(cFldName).AsVariant <> FNewDataSet.FieldByName(cFldName).AsVariant then
-                begin
-                  if s2 <> '' then
-                      s2 := s2 + ', ';
-                  if FNewDataSet.FieldByName(cFldName).IsNull then
-                      s2 := s2 + cFldName + ' = NULL'
-                  else
-                      s2 := s2 + cFldName + ' = ' + SQLValue(FNewDataSet, nFldOrder);
-                end;
-              end;
-            end;
-            Result :=Result+ 'UPDATE ' + ATableName + ' SET ' + s2 +
-              ' WHERE ' + MakeWhere(FOldDataSet)+LineEnding;
-          end;
-          //Deleted
-          if FOldDataSet.FieldByName('DataState').AsString.ToUpper='Deleted'.ToUpper then
-          begin
-            Result :=Result+ 'DELETE FROM ' + ATableName + ' WHERE ' + MakeWhere(FNewDataSet)+LineEnding;
-          end;
-
+          Result :=Result+ 'INSERT INTO ' + ATableName + ' (' + s1 + ')' +
+            ' VALUES (' + s2 + ')'+LineEnding;
         end;
+        //Updated
+        if FOldDataSet.FieldByName('DataState').Asinteger=ord(dsvUpdated) then
+        begin
+          s2 := '';
+          for nFldOrder := 0 to FNewDataSet.FieldCount - 1 do
+          begin
+            cFldName := FNewDataSet.Fields[nFldOrder].FieldName;
+            if (cFldName<>'DataState') then
+            begin
+              if FOldDataSet.FieldByName(cFldName).AsVariant <> FNewDataSet.FieldByName(cFldName).AsVariant then
+              begin
+                if s2 <> '' then
+                    s2 := s2 + ', ';
+                if FNewDataSet.FieldByName(cFldName).IsNull then
+                    s2 := s2 + cFldName + ' = NULL'
+                else
+                    s2 := s2 + cFldName + ' = ' + SQLValue(FNewDataSet, nFldOrder);
+              end;
+            end;
+          end;
+          Result :=Result+ 'UPDATE ' + ATableName + ' SET ' + s2 +
+            ' WHERE ' + MakeWhere(FOldDataSet)+LineEnding;
+        end;
+        //Deleted
+        if FOldDataSet.FieldByName('DataState').Asinteger=ord(dsvDeleted) then
+        begin
+          Result :=Result+ 'DELETE FROM ' + ATableName + ' WHERE ' + MakeWhere(FNewDataSet)+LineEnding;
+        end;
+
         FOldDataSet.Next;
         FNewDataSet.Next;
       end;
-      FOldDataSet.First;
-      while not FOldDataSet.EOF do
-      begin
-        if UpperCase(FOldDataSet.FieldByName('DataSetName').AsString)=UpperCase(self.name) then FOldDataSet.Delete;
-        FOldDataSet.Next;
-      end;
-      FNewDataSet.First;
-      while not FNewDataSet.EOF do
-      begin
-        if UpperCase(FNewDataSet.FieldByName('DataSetName').AsString)=UpperCase(self.name) then FNewDataSet.Delete;
-        FNewDataSet.Next;
-      end;
-      //freeandnil(FNewDataSet);
-      //freeandnil(FOldDataSet);
-      //CreateTable;
+      CreateMonitorDataSet;
       Foldvalue:=nil;
-      setlength(Foldvalue,self.Fields.Count+1);
+      setlength(Foldvalue,FDataSet.Fields.Count);
     end;
   end;
 end;
@@ -356,15 +354,6 @@ end;
 initialization
 
 finalization
-  FBeforeEdit:=nil;
-  FBeforeDelete:=nil;
-  FBeforeInsert:=nil;
-  FAfterPost:=nil;
-  Foldvalue:=nil;
-  if Assigned(FNewDataSet) then
-    freeandnil(FNewDataSet);
-  if Assigned(FOldDataSet) then
-    freeandnil(FOldDataSet);
 
 end.
 

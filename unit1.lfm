@@ -7,7 +7,6 @@ object Form1: TForm1
   ClientHeight = 765
   ClientWidth = 864
   DesignTimePPI = 144
-  OnClose = FormClose
   OnCreate = FormCreate
   object DBGrid1: TDBGrid
     Left = 72
@@ -29,22 +28,13 @@ object Form1: TForm1
     )
     TabOrder = 1
   end
-  object Button1: TButton
-    Left = 576
-    Height = 38
-    Top = 16
-    Width = 113
-    Caption = 'Button1'
-    TabOrder = 2
-    OnClick = Button1Click
-  end
   object Button2: TButton
     Left = 72
     Height = 38
     Top = 16
     Width = 217
     Caption = 'Delta生成SQL  ↓'
-    TabOrder = 3
+    TabOrder = 2
     OnClick = Button2Click
   end
   object DBGrid2: TDBGrid
@@ -55,7 +45,7 @@ object Form1: TForm1
     Color = clWindow
     Columns = <>
     DataSource = DataSource2
-    TabOrder = 4
+    TabOrder = 3
   end
   object Button3: TButton
     Left = 72
@@ -63,7 +53,7 @@ object Form1: TForm1
     Top = 320
     Width = 217
     Caption = 'Delta生成SQL  ↓'
-    TabOrder = 5
+    TabOrder = 4
     OnClick = Button3Click
   end
   object DataSource1: TDataSource
