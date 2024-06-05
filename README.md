@@ -18,4 +18,4 @@ BufDataset使用Delta的方法：
   dcm2.ActivateMonitoring;  
 
   sql:=dcm1.GetActionSQL('test');//读取Delta生成的SQL
-  sql:=dcm2.GetActionSQL('demo');
+  sql:=dcm2.GetActionSQL('demo');  
