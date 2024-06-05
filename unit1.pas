@@ -21,6 +21,7 @@ type
     Memo1: TMemo;
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
   private
   public
@@ -43,6 +44,7 @@ var
   var
     i: integer;
   begin
+
     for i := 1 to Length(str) do
     begin
        // 检查是否在基本汉字范围内
@@ -57,7 +59,7 @@ var
     Result := false; // 没有找到中文字符
   end;
 begin
-  s:='12中文测试';
+  s:='12中文测试'+LineEnding;
   if StringcontainsChinese(s) then
     showmessage('字符串包含中文')
   else
@@ -70,6 +72,11 @@ begin
   sql:=BufDataset1.GetActionSQL('test');
   if sql<>'' then
     memo1.Lines.Add(sql);
+end;
+
+procedure TForm1.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+begin
+  BufDataset1.ActivateMonitoring(false);
 end;
 
 procedure TForm1.FormCreate(Sender: TObject);

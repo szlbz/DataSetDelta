@@ -21,12 +21,11 @@ unit DataSetDelta;
 interface
 
 uses
-  Classes, SysUtils, BufDataset, DB, TypInfo,Variants;
+  Classes, SysUtils, BufDataset, DB, TypInfo, Variants;
 
 type
 
   TDataStateValue = (dsvOriginal, dsvDeleted, dsvInserted, dsvUpdated);
-  //TDataState = set of TDataStateValue;
 
   TDataSetChangesHelper =class Helper for TDataset
   public
@@ -44,7 +43,7 @@ type
 implementation
 
 var
-  FDataState:string;//TDataStateValue;
+  FDataState:string;
   Foldvalue:array of Variant;
   FBeforeEdit: TDataSetNotifyEvent;
   FBeforeDelete: TDataSetNotifyEvent;
@@ -61,7 +60,7 @@ end;
 procedure TDataSetChangesHelper.CreateTable;
 var
   i:integer;
-  LFieldName, LFieldType, LFieldValue: string;
+  LFieldName, LFieldType: string;
   LFieldSize : Integer;
 begin
   FNewDataSet:=TBufDataSet.Create(nil);
@@ -277,7 +276,7 @@ begin
           end;
         end;
         Result :=Result+ 'INSERT INTO ' + ATableName + ' (' + s1 + ')' +
-          ' VALUES (' + s2 + ')'+#13+#10;
+          ' VALUES (' + s2 + ')'+lineEnding;
       end;
       if FOldDataSet.FieldByName('DataState').AsString.ToUpper='Updated'.ToUpper then
       begin
@@ -299,11 +298,11 @@ begin
           end;
         end;
         Result :=Result+ 'UPDATE ' + ATableName + ' SET ' + s2 +
-          ' WHERE ' + MakeWhere(FOldDataSet)+#13+#10;
+          ' WHERE ' + MakeWhere(FOldDataSet)+LineEnding;
       end;
       if FOldDataSet.FieldByName('DataState').AsString.ToUpper='Deleted'.ToUpper then
       begin
-        Result :=Result+ 'DELETE FROM ' + ATableName + ' WHERE ' + MakeWhere(FNewDataSet)+#13+#10;
+        Result :=Result+ 'DELETE FROM ' + ATableName + ' WHERE ' + MakeWhere(FNewDataSet)+lineEnding;
       end;
       FOldDataSet.Next;
       FNewDataSet.Next;
