@@ -187,10 +187,10 @@ begin
     FBeforeInsert:=nil;
     FAfterPost:=nil;
     Foldvalue:=nil;
-  if FNewDataSet<>nil then
-    freeandnil(FNewDataSet);
-  if FOldDataSet<>nil then
-    freeandnil(FOldDataSet);
+    if Assigned(FNewDataSet) then
+      freeandnil(FNewDataSet);
+    if Assigned(FOldDataSet) then
+      freeandnil(FOldDataSet);
   end;
 end;
 
@@ -251,74 +251,79 @@ var
   end;
 begin
   Result := '';
-  if (FNewDataSet.RecordCount>0) then
+  if Assigned(FNewDataSet) then
   begin
-    FNewDataSet.First;
-    FOldDataSet.First;
-    while not FOldDataSet.EOF do
+    if (FNewDataSet.RecordCount>0) then
     begin
-      if FOldDataSet.FieldByName('DataState').AsString.ToUpper='INSERTED' then
+      FNewDataSet.First;
+      FOldDataSet.First;
+      while not FOldDataSet.EOF do
       begin
-        s1 := '';
-        s2 := '';
-        for nFldOrder := 0 to FNewDataSet.FieldCount - 1 do
+        if FOldDataSet.FieldByName('DataState').AsString.ToUpper='INSERTED' then
         begin
-          cFldName := FNewDataSet.Fields[nFldOrder].FieldName;
-          if cFldName<>'DataState' then
+          s1 := '';
+          s2 := '';
+          for nFldOrder := 0 to FNewDataSet.FieldCount - 1 do
           begin
-            if not FNewDataSet.Fields[nFldOrder].IsNull then
+            cFldName := FNewDataSet.Fields[nFldOrder].FieldName;
+            if cFldName<>'DataState' then
             begin
-              if s1 <> '' then
-                  s1 := s1 + ',';
-              if s2 <> '' then
-                  s2 := s2 + ',';
-              s1 := s1 + cFldName;
-              s2 := s2 + SQLValue(FNewDataSet, nFldOrder);
+              if not FNewDataSet.Fields[nFldOrder].IsNull then
+              begin
+                if s1 <> '' then
+                    s1 := s1 + ',';
+                if s2 <> '' then
+                    s2 := s2 + ',';
+                s1 := s1 + cFldName;
+                s2 := s2 + SQLValue(FNewDataSet, nFldOrder);
+              end;
             end;
           end;
+          Result :=Result+ 'INSERT INTO ' + ATableName + ' (' + s1 + ')' +
+            ' VALUES (' + s2 + ')'+lineEnding;
         end;
-        Result :=Result+ 'INSERT INTO ' + ATableName + ' (' + s1 + ')' +
-          ' VALUES (' + s2 + ')'+lineEnding;
-      end;
-      if FOldDataSet.FieldByName('DataState').AsString.ToUpper='Updated'.ToUpper then
-      begin
-        s2 := '';
-        for nFldOrder := 0 to FNewDataSet.FieldCount - 1 do
+        if FOldDataSet.FieldByName('DataState').AsString.ToUpper='Updated'.ToUpper then
         begin
-          cFldName := FNewDataSet.Fields[nFldOrder].FieldName;
-          if cFldName<>'DataState' then
+          s2 := '';
+          for nFldOrder := 0 to FNewDataSet.FieldCount - 1 do
           begin
-            if FOldDataSet.FieldByName(cFldName).AsVariant <> FNewDataSet.FieldByName(cFldName).AsVariant then
+            cFldName := FNewDataSet.Fields[nFldOrder].FieldName;
+            if cFldName<>'DataState' then
             begin
-              if s2 <> '' then
-                  s2 := s2 + ', ';
-              if FNewDataSet.FieldByName(cFldName).IsNull then
-                  s2 := s2 + cFldName + ' = NULL'
-              else
-                  s2 := s2 + cFldName + ' = ' + SQLValue(FNewDataSet, nFldOrder);
+              if FOldDataSet.FieldByName(cFldName).AsVariant <> FNewDataSet.FieldByName(cFldName).AsVariant then
+              begin
+                if s2 <> '' then
+                    s2 := s2 + ', ';
+                if FNewDataSet.FieldByName(cFldName).IsNull then
+                    s2 := s2 + cFldName + ' = NULL'
+                else
+                    s2 := s2 + cFldName + ' = ' + SQLValue(FNewDataSet, nFldOrder);
+              end;
             end;
           end;
+          Result :=Result+ 'UPDATE ' + ATableName + ' SET ' + s2 +
+            ' WHERE ' + MakeWhere(FOldDataSet)+LineEnding;
         end;
-        Result :=Result+ 'UPDATE ' + ATableName + ' SET ' + s2 +
-          ' WHERE ' + MakeWhere(FOldDataSet)+LineEnding;
+        if FOldDataSet.FieldByName('DataState').AsString.ToUpper='Deleted'.ToUpper then
+        begin
+          Result :=Result+ 'DELETE FROM ' + ATableName + ' WHERE ' + MakeWhere(FNewDataSet)+lineEnding;
+        end;
+        FOldDataSet.Next;
+        FNewDataSet.Next;
       end;
-      if FOldDataSet.FieldByName('DataState').AsString.ToUpper='Deleted'.ToUpper then
-      begin
-        Result :=Result+ 'DELETE FROM ' + ATableName + ' WHERE ' + MakeWhere(FNewDataSet)+lineEnding;
-      end;
-      FOldDataSet.Next;
-      FNewDataSet.Next;
-    end;
 
-    FNewDataSet.Clear;
-    FOldDataSet.Clear;
-    FNewDataSet.Free;
-    FOldDataSet.Free;
-    CreateTable;
-    Foldvalue:=nil;
-    setlength(Foldvalue,self.Fields.Count);
- end;
+      FNewDataSet.Clear;
+      FOldDataSet.Clear;
+      FNewDataSet.Free;
+      FOldDataSet.Free;
+      CreateTable;
+      Foldvalue:=nil;
+      setlength(Foldvalue,self.Fields.Count);
+    end;
+  end;
 end;
+
+initialization
 
 finalization
   FBeforeEdit:=nil;
@@ -326,9 +331,9 @@ finalization
   FBeforeInsert:=nil;
   FAfterPost:=nil;
   Foldvalue:=nil;
-  if FNewDataSet<>nil then
+  if Assigned(FNewDataSet) then
     freeandnil(FNewDataSet);
-  if FOldDataSet<>nil then
+  if Assigned(FOldDataSet) then
     freeandnil(FOldDataSet);
 
 end.
