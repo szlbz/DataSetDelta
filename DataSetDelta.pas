@@ -187,8 +187,10 @@ begin
     FBeforeInsert:=nil;
     FAfterPost:=nil;
     Foldvalue:=nil;
-    FNewDataSet.Free;
-    FOldDataSet.Free;
+  if FNewDataSet<>nil then
+    freeandnil(FNewDataSet);
+  if FOldDataSet<>nil then
+    freeandnil(FOldDataSet);
   end;
 end;
 
@@ -317,6 +319,17 @@ begin
     setlength(Foldvalue,self.Fields.Count);
  end;
 end;
+
+finalization
+  FBeforeEdit:=nil;
+  FBeforeDelete:=nil;
+  FBeforeInsert:=nil;
+  FAfterPost:=nil;
+  Foldvalue:=nil;
+  if FNewDataSet<>nil then
+    freeandnil(FNewDataSet);
+  if FOldDataSet<>nil then
+    freeandnil(FOldDataSet);
 
 end.
 
