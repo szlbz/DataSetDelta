@@ -1,18 +1,18 @@
 object Form1: TForm1
   Left = 395
-  Height = 738
+  Height = 765
   Top = 36
   Width = 864
   Caption = 'Form1'
-  ClientHeight = 738
+  ClientHeight = 765
   ClientWidth = 864
   DesignTimePPI = 144
   OnClose = FormClose
   OnCreate = FormCreate
   object DBGrid1: TDBGrid
-    Left = 70
+    Left = 72
     Height = 218
-    Top = 102
+    Top = 64
     Width = 730
     Color = clWindow
     Columns = <>
@@ -20,9 +20,9 @@ object Form1: TForm1
     TabOrder = 0
   end
   object Memo1: TMemo
-    Left = 70
-    Height = 218
-    Top = 368
+    Left = 72
+    Height = 154
+    Top = 600
     Width = 730
     Lines.Strings = (
       'Memo1'
@@ -30,22 +30,41 @@ object Form1: TForm1
     TabOrder = 1
   end
   object Button1: TButton
-    Left = 600
+    Left = 576
     Height = 38
-    Top = 32
+    Top = 16
     Width = 113
     Caption = 'Button1'
     TabOrder = 2
     OnClick = Button1Click
   end
   object Button2: TButton
-    Left = 96
+    Left = 72
     Height = 38
     Top = 16
     Width = 217
-    Caption = 'Delta生成SQL'
+    Caption = 'Delta生成SQL  ↓'
     TabOrder = 3
     OnClick = Button2Click
+  end
+  object DBGrid2: TDBGrid
+    Left = 72
+    Height = 218
+    Top = 368
+    Width = 730
+    Color = clWindow
+    Columns = <>
+    DataSource = DataSource2
+    TabOrder = 4
+  end
+  object Button3: TButton
+    Left = 72
+    Height = 38
+    Top = 320
+    Width = 217
+    Caption = 'Delta生成SQL  ↓'
+    TabOrder = 5
+    OnClick = Button3Click
   end
   object DataSource1: TDataSource
     DataSet = BufDataset1
@@ -56,5 +75,15 @@ object Form1: TForm1
     FieldDefs = <>
     Left = 348
     Top = 37
+  end
+  object BufDataset2: TBufDataset
+    FieldDefs = <>
+    Left = 464
+    Top = 181
+  end
+  object DataSource2: TDataSource
+    DataSet = BufDataset2
+    Left = 604
+    Top = 176
   end
 end

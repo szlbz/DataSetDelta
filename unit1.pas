@@ -14,13 +14,18 @@ type
 
   TForm1 = class(TForm)
     BufDataset1: TBufDataset;
+    BufDataset2: TBufDataset;
     Button1: TButton;
     Button2: TButton;
+    Button3: TButton;
     DataSource1: TDataSource;
+    DataSource2: TDataSource;
     DBGrid1: TDBGrid;
+    DBGrid2: TDBGrid;
     Memo1: TMemo;
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
   private
@@ -74,18 +79,34 @@ begin
     memo1.Lines.Add(sql);
 end;
 
+procedure TForm1.Button3Click(Sender: TObject);
+var sql:string;
+begin
+  sql:=BufDataset2.GetActionSQL('demo');
+  if sql<>'' then
+    memo1.Lines.Add(sql);
+end;
+
 procedure TForm1.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
-  BufDataset1.ActivateMonitoring(false);
+  //BufDataset1.ActivateMonitoring(false);
 end;
 
 procedure TForm1.FormCreate(Sender: TObject);
 begin
+  BufDataset1.FieldDefs.Clear;
   BufDataset1.FieldDefs.Add('test1', TFieldType(GetEnumValue(TypeInfo(TFieldType), 'ftString')), 30);
   BufDataset1.FieldDefs.Add('test2', TFieldType(GetEnumValue(TypeInfo(TFieldType), 'ftinteger')));
   BufDataset1.CreateDataset;
 
+  BufDataset2.FieldDefs.Clear;
+  BufDataset2.FieldDefs.Add('test1', TFieldType(GetEnumValue(TypeInfo(TFieldType), 'ftString')), 30);
+  BufDataset2.FieldDefs.Add('test2', TFieldType(GetEnumValue(TypeInfo(TFieldType), 'ftinteger')));
+  BufDataset2.CreateDataset;
+
   memo1.Lines.Clear;
+  BufDataset2.Open;
+  BufDataset2.ActivateMonitoring(true);
   BufDataset1.Open;
   BufDataset1.ActivateMonitoring(true);
 end;
