@@ -29,7 +29,7 @@ object Form1: TForm1
     TabOrder = 1
   end
   object Button1: TButton
-    Left = 496
+    Left = 600
     Height = 38
     Top = 32
     Width = 113
@@ -46,46 +46,14 @@ object Form1: TForm1
     TabOrder = 3
     OnClick = Button2Click
   end
-  object BufDataset1: TBufDataset
-    IndexName = 'DEFAULT_ORDER'
-    MaxIndexesCount = 4
-    FieldDefs = <    
-      item
-        Name = 'test1'
-        DataType = ftString
-        Precision = -1
-        Size = 20
-      end    
-      item
-        Name = 'test2'
-        DataType = ftInteger
-        Precision = -1
-      end>
-    Active = True
-    Left = 120
-    Top = 24
-    object BufDataset1test1: TStringField
-      FieldKind = fkData
-      FieldName = 'test1'
-      Index = 0
-      LookupCache = False
-      ProviderFlags = [pfInUpdate, pfInWhere]
-      ReadOnly = False
-      Required = False
-    end
-    object BufDataset1test2: TLongintField
-      FieldKind = fkData
-      FieldName = 'test2'
-      Index = 1
-      LookupCache = False
-      ProviderFlags = [pfInUpdate, pfInWhere]
-      ReadOnly = False
-      Required = False
-    end
-  end
   object DataSource1: TDataSource
     DataSet = BufDataset1
-    Left = 248
-    Top = 24
+    Left = 488
+    Top = 32
+  end
+  object BufDataset1: TBufDataset
+    FieldDefs = <>
+    Left = 348
+    Top = 37
   end
 end

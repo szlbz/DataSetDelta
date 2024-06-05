@@ -30,9 +30,7 @@ type
 
   TDataSetChangesHelper =class Helper for TDataset
   public
-    procedure createTable;
-    function GetNewDataSet : TBufDataSet;
-    function GetOldDataSet : TBufDataSet;
+    procedure CreateTable;
     function GetActionSQL(const ATableName : String; const AKeyFields: String = ''): String;
     function GetChangedCount:int64;
     procedure BeforeInserts(DataSet: TDataSet);
@@ -40,8 +38,6 @@ type
     procedure BeforeDeletes(DataSet:TDataSet);
     procedure AfterPosts(DataSet: TDataSet);
     procedure ActivateMonitoring(Value:Boolean);
-    //property NewDataSet:TBufDataSet read GetNewDataSet;
-    //property OldDataSet:TBufDataSet read GetOldDataSet;
     property ChangedCount:int64 read GetChangedCount;
   end;
 
@@ -57,22 +53,12 @@ var
   FNewDataSet:TBufDataSet;
   FOldDataSet:TBufDataSet;
 
-function TDataSetChangesHelper.GetNewDataSet : TBufDataSet;
-begin
-  Result:=FNewDataSet;
-end;
-
-function TDataSetChangesHelper.GetOldDataSet : TBufDataSet;
-begin
-  Result:=FOldDataSet;
-end;
-
 function TDataSetChangesHelper.GetChangedCount:int64;
 begin
   Result:=FOldDataSet.RecordCount;
 end;
 
-procedure TDataSetChangesHelper.createTable;
+procedure TDataSetChangesHelper.CreateTable;
 var
   i:integer;
   LFieldName, LFieldType, LFieldValue: string;
@@ -188,7 +174,7 @@ begin
       self.BeforeDelete:=@BeforeDeletes;
       self.BeforeInsert:=@BeforeInserts;
       self.AfterPost:=@AfterPosts;
-      createTable;
+      CreateTable;
     end;
   end
   else
@@ -222,7 +208,7 @@ var
     eType := ARow.Fields[AOrder].DataType;
     cValue := ARow.Fields[AOrder].Value;
     if eType in [ftString, ftDate, ftTime, ftDateTime,
-      ftFixedChar, ftWideString, ftOraTimeStamp] then
+      ftFixedChar, ftWideString] then
     begin
       Result := QuotedStr(cValue)
     end
@@ -291,7 +277,7 @@ begin
           end;
         end;
         Result :=Result+ 'INSERT INTO ' + ATableName + ' (' + s1 + ')' +
-          ' VALUES (' + s2 + ')'+chr(#13)+chr(#10);
+          ' VALUES (' + s2 + ')'+#13+#10;
       end;
       if FOldDataSet.FieldByName('DataState').AsString.ToUpper='Updated'.ToUpper then
       begin
@@ -313,11 +299,11 @@ begin
           end;
         end;
         Result :=Result+ 'UPDATE ' + ATableName + ' SET ' + s2 +
-          ' WHERE ' + MakeWhere(FOldDataSet)+chr(#13)+chr(#10);
+          ' WHERE ' + MakeWhere(FOldDataSet)+#13+#10;
       end;
       if FOldDataSet.FieldByName('DataState').AsString.ToUpper='Deleted'.ToUpper then
       begin
-        Result :=Result+ 'DELETE FROM ' + ATableName + ' WHERE ' + MakeWhere(FNewDataSet)+chr(#13)+chr(#10);
+        Result :=Result+ 'DELETE FROM ' + ATableName + ' WHERE ' + MakeWhere(FNewDataSet)+#13+#10;
       end;
       FOldDataSet.Next;
       FNewDataSet.Next;
@@ -327,7 +313,7 @@ begin
     FOldDataSet.Clear;
     FNewDataSet.Free;
     FOldDataSet.Free;
-    createTable;
+    CreateTable;
     Foldvalue:=nil;
     setlength(Foldvalue,self.Fields.Count);
  end;

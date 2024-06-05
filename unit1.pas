@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, BufDataset, DB, Forms, Controls, Graphics, Dialogs,
-  DBGrids, StdCtrls,  Memds,TypInfo,Variants,DataSetDelta;
+  DBGrids, StdCtrls,  Memds,TypInfo,Variants,DataSetDelta,lazutf8;
 
 type
 
@@ -14,8 +14,6 @@ type
 
   TForm1 = class(TForm)
     BufDataset1: TBufDataset;
-    BufDataset1test1: TStringField;
-    BufDataset1test2: TLongintField;
     Button1: TButton;
     Button2: TButton;
     DataSource1: TDataSource;
@@ -39,9 +37,31 @@ implementation
 { TForm1 }
 
 procedure TForm1.Button1Click(Sender: TObject);
+var
+  s: string;
+  function StringContainsChinese(const str: Widestring): boolean;
+  var
+    i: integer;
+  begin
+    for i := 1 to Length(str) do
+    begin
+       // 检查是否在基本汉字范围内
+      if (Ord(str[i]) >= $4E00) and (Ord(str[i]) <= $9FFF) then
+      begin
+        Result := true;
+        Exit; // 找到一个就返回 true
+      end;
+      // 可以添加更多的检查，例如扩展的 Unicode 区域
+      // ...
+    end;
+    Result := false; // 没有找到中文字符
+  end;
 begin
-  //frLocalizationController1.ShowLocalizationEditor;
-  //frxReport1.DesignReport();
+  s:='12中文测试';
+  if StringcontainsChinese(s) then
+    showmessage('字符串包含中文')
+  else
+    showmessage('字符串不包含中文');
 end;
 
 procedure TForm1.Button2Click(Sender: TObject);
@@ -54,7 +74,12 @@ end;
 
 procedure TForm1.FormCreate(Sender: TObject);
 begin
+  BufDataset1.FieldDefs.Add('test1', TFieldType(GetEnumValue(TypeInfo(TFieldType), 'ftString')), 30);
+  BufDataset1.FieldDefs.Add('test2', TFieldType(GetEnumValue(TypeInfo(TFieldType), 'ftinteger')));
+  BufDataset1.CreateDataset;
+
   memo1.Lines.Clear;
+  BufDataset1.Open;
   BufDataset1.ActivateMonitoring(true);
 end;
 
