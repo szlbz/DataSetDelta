@@ -213,16 +213,15 @@ function TDataSetChangesHelper.GetActionSQL(const ATableName
 var
   nFldOrder: integer;
   cFldName, s1, s2: String;
-  DataSetName:string;
 
-  function SQLValue(const ARow: TBufDataSet; AOrder: Integer): String;
+  function SQLValue(const ADataSet: TBufDataSet; AOrder: Integer): String;
   var
     cName, cValue: String;
     eType: TFieldType;
   begin
-    cName := ARow.Fields[AOrder].FieldName;
-    eType := ARow.Fields[AOrder].DataType;
-    cValue := ARow.Fields[AOrder].Value;
+    cName := ADataSet.Fields[AOrder].FieldName;
+    eType := ADataSet.Fields[AOrder].DataType;
+    cValue := ADataSet.Fields[AOrder].Value;
     if eType in [ftString, ftDate, ftTime, ftDateTime,
       ftFixedChar, ftWideString] then
     begin
@@ -240,26 +239,26 @@ var
         Result := cValue;
   end;
 
-  function MakeWhere(const ARow: TBufDataSet): String;
+  function MakeWhere(const ADataSet: TBufDataSet): String;
   var
     cKeyFields: String;
     i: Integer;
   begin
     cKeyFields := AKeyFields + ',';
     Result := '';
-    for i := 0 to ARow.FieldCount - 1 do
+    for i := 0 to ADataSet.FieldCount - 1 do
     begin
-      cFldName := ARow.Fields[i].FieldName;
+      cFldName := ADataSet.Fields[i].FieldName;
       if (cFldName<>'DataState') and (cFldName<>'DataSetName') then
       begin
         if (cKeyFields = ',') or (Pos(cFldName + ',', cKeyFields) > 0) then
         begin
           if Result <> '' then
               Result := Result + ' AND ';
-          if ARow.Fields[i].IsNull then
+          if ADataSet.Fields[i].IsNull then
               Result := Result + cFldName + ' IS NULL'
           else
-              Result := Result + cFldName + ' = ' + SQLValue(ARow, i);
+              Result := Result + cFldName + ' = ' + SQLValue(ADataSet, i);
         end;
       end;
     end;
@@ -272,11 +271,11 @@ begin
     begin
       FNewDataSet.First;
       FOldDataSet.First;
-      DataSetName:=self.Name;
       while not FOldDataSet.EOF do
       begin
         if UpperCase(FOldDataSet.FieldByName('DataSetName').AsString)=UpperCase(self.name) then
         begin
+          //INSERTED
           if FOldDataSet.FieldByName('DataState').AsString.ToUpper='INSERTED' then
           begin
             s1 := '';
@@ -300,6 +299,7 @@ begin
             Result :=Result+ 'INSERT INTO ' + ATableName + ' (' + s1 + ')' +
               ' VALUES (' + s2 + ')'+LineEnding;
           end;
+          //Updated
           if FOldDataSet.FieldByName('DataState').AsString.ToUpper='Updated'.ToUpper then
           begin
             s2 := '';
@@ -322,6 +322,7 @@ begin
             Result :=Result+ 'UPDATE ' + ATableName + ' SET ' + s2 +
               ' WHERE ' + MakeWhere(FOldDataSet)+LineEnding;
           end;
+          //Deleted
           if FOldDataSet.FieldByName('DataState').AsString.ToUpper='Deleted'.ToUpper then
           begin
             Result :=Result+ 'DELETE FROM ' + ATableName + ' WHERE ' + MakeWhere(FNewDataSet)+LineEnding;
