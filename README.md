@@ -19,3 +19,5 @@ BufDataset使用Delta的方法：
 
   sql:=dcm1.GetActionSQL('test');//读取Delta生成的SQL
   sql:=dcm2.GetActionSQL('demo');  
+
+
