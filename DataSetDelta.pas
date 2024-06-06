@@ -84,6 +84,8 @@ begin
   if (AValue <> FDataSet) then
   begin
     FDataSet:=AValue;
+    if not (csDesigning in ComponentState) then
+      CreateMonitorDataSet;
   end;
 end;
 
@@ -93,6 +95,9 @@ var
   LFieldName, LFieldType: string;
   LFieldSize : Integer;
 begin
+  if Foldvalue<>nil then
+    Foldvalue:=nil;
+  setlength(Foldvalue,FDataSet.Fields.Count);
   if Assigned(FNewDataSet) then
     freeandnil(FNewDataSet);
   if Assigned(FOldDataSet) then
@@ -205,7 +210,6 @@ begin
       FDataSet.BeforeDelete:=@BeforeDeletes;
       FDataSet.BeforeInsert:=@BeforeInserts;
       FDataSet.AfterPost:=@AfterPosts;
-      setlength(Foldvalue,FDataSet.Fields.Count);
       CreateMonitorDataSet;
     end;
   end
@@ -345,8 +349,6 @@ begin
         FNewDataSet.Next;
       end;
       CreateMonitorDataSet;
-      Foldvalue:=nil;
-      setlength(Foldvalue,FDataSet.Fields.Count);
     end;
   end;
 end;
