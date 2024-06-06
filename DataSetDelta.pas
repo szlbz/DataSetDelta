@@ -43,13 +43,13 @@ type
     procedure BeforeEdits(DataSet: TDataSet);
     procedure BeforeDeletes(DataSet:TDataSet);
     procedure AfterPosts(DataSet: TDataSet);
-    function GetChangedCount:int64;
+    function GetChanged:Boolean;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
     function GetActionSQL(const ATableName : String; const AKeyFields: String = ''): String;
     procedure ActivateMonitoring(AValue:Boolean =true);
-    property ChangedCount:int64 read GetChangedCount;
+    property Changed:Boolean read GetChanged;
     property DataSet:TDataSet read FDataSet write SetDataSet;
   end;
 
@@ -74,9 +74,9 @@ begin
     freeandnil(FOldDataSet);
 end;
 
-function TDataSetChangesMonitor.GetChangedCount:int64;
+function TDataSetChangesMonitor.GetChanged:Boolean;
 begin
-  Result:=FOldDataSet.RecordCount;
+  Result:=FOldDataSet.RecordCount>0;
 end;
 
 procedure TDataSetChangesMonitor.SetDataSet(AValue: TDataSet);
@@ -95,13 +95,11 @@ var
   LFieldName, LFieldType: string;
   LFieldSize : Integer;
 begin
-  if Foldvalue<>nil then
-    Foldvalue:=nil;
+  if Foldvalue<>nil then Foldvalue:=nil;
   setlength(Foldvalue,FDataSet.Fields.Count);
-  if Assigned(FNewDataSet) then
-    freeandnil(FNewDataSet);
-  if Assigned(FOldDataSet) then
-    freeandnil(FOldDataSet);
+
+  if Assigned(FNewDataSet) then freeandnil(FNewDataSet);
+  if Assigned(FOldDataSet) then freeandnil(FOldDataSet);
 
   FNewDataSet:=TBufDataSet.Create(nil);
   for I := 0 to FDataSet.FieldCount - 1 do
@@ -235,10 +233,9 @@ var
 
   function SQLValue(const ADataSet: TBufDataSet; AOrder: Integer): String;
   var
-    cName, cValue: String;
+    cValue: String;
     eType: TFieldType;
   begin
-    //cName := ADataSet.Fields[AOrder].FieldName;
     eType := ADataSet.Fields[AOrder].DataType;
     cValue := ADataSet.Fields[AOrder].Value;
     if eType in [ftString, ftDate, ftTime, ftDateTime,
