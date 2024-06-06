@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, BufDataset, DB, Forms, Controls, Graphics, Dialogs,
-  DBGrids, StdCtrls,  Memds,TypInfo,Variants,DataSetDelta,lazutf8;
+  LCLType, DBGrids, StdCtrls, TypInfo, DataSetDelta;
 
 type
 
@@ -24,6 +24,8 @@ type
     Memo1: TMemo;
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure FormCreate(Sender: TObject);
   private
   public
@@ -58,6 +60,25 @@ begin
   sql:=dcm2.GetActionSQL('demo');
   if sql<>'' then
     memo1.Lines.Add(sql);
+end;
+
+procedure TForm1.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+begin
+  if Assigned(dcm1) then freeandnil(dcm1);
+  if Assigned(dcm2) then freeandnil(dcm2);
+end;
+
+procedure TForm1.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+begin
+  if BufDataset1.State in [dsEdit, dsInsert] then
+    BufDataset1.Post;
+  if BufDataset2.State in [dsEdit, dsInsert] then
+    BufDataset2.Post;
+  if (dcm1.Changed) or (dcm2.Changed) then
+  begin
+    if application.MessageBox('数据有变化，是否退出？', '注意', MB_YESNO) = IDNO then
+      CanClose:=false;
+  end;
 end;
 
 procedure TForm1.FormCreate(Sender: TObject);

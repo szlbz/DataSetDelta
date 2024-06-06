@@ -8,7 +8,7 @@
       <Unit>
         <Filename Value="project1.lpr"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="3"/>
         <CursorPos Y="23"/>
         <UsageCount Value="214"/>
         <Loaded Value="True"/>
@@ -20,8 +20,9 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="Unit1"/>
-        <TopLine Value="58"/>
-        <CursorPos X="32" Y="84"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="6"/>
+        <CursorPos X="31" Y="9"/>
         <UsageCount Value="214"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -144,10 +145,10 @@
       </Unit>
       <Unit>
         <Filename Value="DataSetDelta.pas"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="1"/>
-        <CursorPos X="90" Y="5"/>
-        <UsageCount Value="97"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="36"/>
+        <CursorPos X="45" Y="52"/>
+        <UsageCount Value="99"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -418,123 +419,144 @@
         <CursorPos X="58" Y="55"/>
         <UsageCount Value="10"/>
       </Unit>
+      <Unit>
+        <Filename Value="..\..\lazarus\lcl\include\messagedialogs.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="206"/>
+        <CursorPos X="3" Y="208"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\..\lazarus\lcl\dialogs.pp"/>
+        <UnitName Value="Dialogs"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="716"/>
+        <CursorPos X="11" Y="731"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\..\lazarus\lcl\include\application.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="221"/>
+        <CursorPos X="56" Y="224"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\..\lazarus\lcl\forms.pp"/>
+        <UnitName Value="Forms"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="1973"/>
+        <CursorPos X="3" Y="1990"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\..\lazarus\components\printers\samples\dialogs\frmselprinter.pas"/>
+        <ComponentName Value="Form1"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="514"/>
+        <CursorPos X="36" Y="530"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\..\lazarus\components\exampleswindow\ulaz_examples.pas"/>
+        <ComponentName Value="FormLazExam"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="uLaz_Examples"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="215"/>
+        <CursorPos X="50" Y="270"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
+      </Unit>
     </Units>
-    <JumpHistory HistoryIndex="28">
+    <JumpHistory HistoryIndex="20">
       <Position>
         <Filename Value="DataSetDelta.pas"/>
-        <Caret Line="190" Column="69" TopLine="173"/>
+        <Caret Line="99" TopLine="82"/>
       </Position>
       <Position>
         <Filename Value="DataSetDelta.pas"/>
-        <Caret Line="255" Column="31" TopLine="237"/>
+        <Caret Line="87" Column="20" TopLine="163"/>
       </Position>
       <Position>
         <Filename Value="DataSetDelta.pas"/>
-        <Caret Line="280" Column="76" TopLine="269"/>
+        <Caret Line="91" Column="54" TopLine="74"/>
       </Position>
       <Position>
         <Filename Value="DataSetDelta.pas"/>
-        <Caret Line="29" Column="43" TopLine="20"/>
+        <Caret Line="212" Column="44" TopLine="185"/>
       </Position>
       <Position>
         <Filename Value="DataSetDelta.pas"/>
-        <Caret Line="32" Column="32" TopLine="23"/>
-      </Position>
-      <Position>
-        <Filename Value="DataSetDelta.pas"/>
-        <Caret Line="137" Column="30" TopLine="120"/>
-      </Position>
-      <Position>
-        <Filename Value="DataSetDelta.pas"/>
-        <Caret Line="150" Column="29" TopLine="133"/>
-      </Position>
-      <Position>
-        <Filename Value="DataSetDelta.pas"/>
-        <Caret Line="161" Column="27" TopLine="144"/>
-      </Position>
-      <Position>
-        <Filename Value="DataSetDelta.pas"/>
-        <Caret Line="171" Column="65" TopLine="154"/>
-      </Position>
-      <Position>
-        <Filename Value="DataSetDelta.pas"/>
-        <Caret Line="32" Column="31" TopLine="7"/>
-      </Position>
-      <Position>
-        <Filename Value="DataSetDelta.pas"/>
-        <Caret Line="137" Column="28" TopLine="120"/>
-      </Position>
-      <Position>
-        <Filename Value="DataSetDelta.pas"/>
-        <Caret Line="150" Column="27" TopLine="133"/>
-      </Position>
-      <Position>
-        <Filename Value="DataSetDelta.pas"/>
-        <Caret Line="161" Column="25" TopLine="144"/>
-      </Position>
-      <Position>
-        <Filename Value="DataSetDelta.pas"/>
-        <Caret Line="171" Column="57" TopLine="154"/>
+        <Caret Line="213" Column="27" TopLine="185"/>
       </Position>
       <Position>
         <Filename Value="unit1.pas"/>
-        <Caret Line="78" Column="20" TopLine="67"/>
+        <Caret Line="88" Column="41" TopLine="65"/>
+      </Position>
+      <Position>
+        <Filename Value="DataSetDelta.pas"/>
+        <Caret Line="48" Column="20" TopLine="32"/>
+      </Position>
+      <Position>
+        <Filename Value="DataSetDelta.pas"/>
+        <Caret Line="58" Column="45" TopLine="31"/>
+      </Position>
+      <Position>
+        <Filename Value="DataSetDelta.pas"/>
+        <Caret Line="60" Column="3" TopLine="19"/>
+      </Position>
+      <Position>
+        <Filename Value="DataSetDelta.pas"/>
+        <Caret Line="46" Column="37" TopLine="16"/>
+      </Position>
+      <Position>
+        <Filename Value="DataSetDelta.pas"/>
+        <Caret Line="79" Column="34" TopLine="77"/>
+      </Position>
+      <Position>
+        <Filename Value="DataSetDelta.pas"/>
+        <Caret Line="77" Column="43" TopLine="60"/>
       </Position>
       <Position>
         <Filename Value="unit1.pas"/>
-        <Caret Line="43" TopLine="34"/>
+        <Caret Line="88" Column="38" TopLine="65"/>
       </Position>
       <Position>
         <Filename Value="unit1.pas"/>
-        <Caret Line="42" TopLine="33"/>
+        <Caret Line="78" Column="3" TopLine="48"/>
       </Position>
       <Position>
         <Filename Value="unit1.pas"/>
-        <Caret Line="84" Column="28" TopLine="58"/>
+        <Caret Line="76" Column="5" TopLine="48"/>
       </Position>
       <Position>
-        <Filename Value="DataSetDelta.pas"/>
-        <Caret Line="197" Column="52" TopLine="197"/>
+        <Filename Value="unit1.pas"/>
+        <Caret Line="76" TopLine="48"/>
       </Position>
       <Position>
-        <Filename Value="DataSetDelta.pas"/>
-        <Caret Line="52" Column="33" TopLine="52"/>
+        <Filename Value="unit1.pas"/>
+        <Caret Line="75" Column="60" TopLine="59"/>
       </Position>
       <Position>
-        <Filename Value="DataSetDelta.pas"/>
-        <Caret Line="41" Column="35" TopLine="33"/>
+        <Filename Value="unit1.pas"/>
+        <Caret Line="75" Column="31" TopLine="59"/>
       </Position>
       <Position>
-        <Filename Value="DataSetDelta.pas"/>
-        <Caret Line="91" Column="54" TopLine="89"/>
+        <Filename Value="unit1.pas"/>
+        <Caret Line="9" Column="13" TopLine="6"/>
       </Position>
       <Position>
-        <Filename Value="DataSetDelta.pas"/>
-        <Caret Line="354" Column="26" TopLine="332"/>
+        <Filename Value="unit1.pas"/>
+        <Caret Line="76" Column="68" TopLine="60"/>
       </Position>
       <Position>
-        <Filename Value="DataSetDelta.pas"/>
-        <Caret Line="211" Column="48" TopLine="194"/>
-      </Position>
-      <Position>
-        <Filename Value="DataSetDelta.pas"/>
-        <Caret Line="354" Column="26" TopLine="327"/>
-      </Position>
-      <Position>
-        <Filename Value="DataSetDelta.pas"/>
-        <Caret Line="126" Column="39" TopLine="104"/>
-      </Position>
-      <Position>
-        <Filename Value="DataSetDelta.pas"/>
-        <Caret Line="136" Column="15" TopLine="108"/>
-      </Position>
-      <Position>
-        <Filename Value="DataSetDelta.pas"/>
-        <Caret Line="149" Column="15" TopLine="121"/>
-      </Position>
-      <Position>
-        <Filename Value="DataSetDelta.pas"/>
-        <Caret Line="160" Column="13" TopLine="132"/>
+        <Filename Value="unit1.pas"/>
+        <Caret Line="9" Column="21"/>
       </Position>
     </JumpHistory>
     <RunParams>
