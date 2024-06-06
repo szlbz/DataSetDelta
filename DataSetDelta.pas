@@ -98,38 +98,49 @@ var
   LFieldSize : Integer;
 begin
   if Foldvalue<>nil then Foldvalue:=nil;
-  setlength(Foldvalue,FDataSet.Fields.Count);
-
-  if Assigned(FNewDataSet) then freeandnil(FNewDataSet);
-  if Assigned(FOldDataSet) then freeandnil(FOldDataSet);
-
-  FNewDataSet:=TBufDataSet.Create(nil);
-  for I := 0 to FDataSet.FieldCount - 1 do
-  begin
-    LFieldName := FDataSet.Fields[I].FieldName;
-    LFieldType := GetEnumName(TypeInfo(TFieldType), Integer(FDataSet.Fields[I].DataType));
-    LFieldSize := FDataSet.Fields[I].DataSize;
-    if (LFieldType = 'ftString') then
-      FNewDataSet.FieldDefs.Add(LFieldName, TFieldType(GetEnumValue(TypeInfo(TFieldType), LFieldType)), LFieldSize)
-    else
-      FNewDataSet.FieldDefs.Add(LFieldName, TFieldType(GetEnumValue(TypeInfo(TFieldType), LFieldType)));
+  try
+    setlength(Foldvalue,FDataSet.Fields.Count);
+  except
+    exit;
   end;
-  FNewDataSet.FieldDefs.Add('DataState', TFieldType(GetEnumValue(TypeInfo(TFieldType), 'ftinteger')));
-  FNewDataSet.CreateDataset;
 
-  FOldDataSet:=TBufDataSet.Create(nil);
-  for I := 0 to FDataSet.FieldCount - 1 do
-  begin
-    LFieldName := FDataSet.Fields[I].FieldName;
-    LFieldType := GetEnumName(TypeInfo(TFieldType), Integer(FDataSet.Fields[I].DataType));
-    LFieldSize := FDataSet.Fields[I].DataSize;
-    if (LFieldType = 'ftString')  then
-      FOldDataSet.FieldDefs.Add(LFieldName, TFieldType(GetEnumValue(TypeInfo(TFieldType), LFieldType)), LFieldSize)
-    else
-      FOldDataSet.FieldDefs.Add(LFieldName, TFieldType(GetEnumValue(TypeInfo(TFieldType), LFieldType)));
+  if Assigned(FNewDataSet) then
+    freeandnil(FNewDataSet);
+  if Assigned(FOldDataSet) then
+    freeandnil(FOldDataSet);
+
+  try
+    FNewDataSet:=TBufDataSet.Create(nil);
+  finally
+    for I := 0 to FDataSet.FieldCount - 1 do
+    begin
+      LFieldName := FDataSet.Fields[I].FieldName;
+      LFieldType := GetEnumName(TypeInfo(TFieldType), Integer(FDataSet.Fields[I].DataType));
+      LFieldSize := FDataSet.Fields[I].DataSize;
+      if (LFieldType = 'ftString') then
+        FNewDataSet.FieldDefs.Add(LFieldName, TFieldType(GetEnumValue(TypeInfo(TFieldType), LFieldType)), LFieldSize)
+      else
+        FNewDataSet.FieldDefs.Add(LFieldName, TFieldType(GetEnumValue(TypeInfo(TFieldType), LFieldType)));
+    end;
+    FNewDataSet.FieldDefs.Add('DataState', TFieldType(GetEnumValue(TypeInfo(TFieldType), 'ftinteger')));
+    FNewDataSet.CreateDataset;
   end;
-  FOldDataSet.FieldDefs.Add('DataState', TFieldType(GetEnumValue(TypeInfo(TFieldType), 'ftinteger')));
-  FOldDataSet.CreateDataset;
+  try
+    FOldDataSet:=TBufDataSet.Create(nil);
+  finally
+    for I := 0 to FDataSet.FieldCount - 1 do
+    begin
+      LFieldName := FDataSet.Fields[I].FieldName;
+      LFieldType := GetEnumName(TypeInfo(TFieldType), Integer(FDataSet.Fields[I].DataType));
+      LFieldSize := FDataSet.Fields[I].DataSize;
+      if (LFieldType = 'ftString')  then
+        FOldDataSet.FieldDefs.Add(LFieldName, TFieldType(GetEnumValue(TypeInfo(TFieldType), LFieldType)), LFieldSize)
+      else
+        FOldDataSet.FieldDefs.Add(LFieldName, TFieldType(GetEnumValue(TypeInfo(TFieldType), LFieldType)));
+    end;
+    FOldDataSet.FieldDefs.Add('DataState', TFieldType(GetEnumValue(TypeInfo(TFieldType), 'ftinteger')));
+    FOldDataSet.CreateDataset;
+  end;
 end;
 
 procedure TDataSetChangesMonitor.BeforeInserts(DataSet: TDataSet);
@@ -163,16 +174,19 @@ begin
   FDataState:=dsvDeleted;
   if Foldvalue<>nil then
   begin
-    FNewDataSet.Append;
-    FOldDataSet.Append;
-    for i:=0 to DataSet.Fields.Count-1 do
+    if Assigned(FNewDataSet) and Assigned(FOldDataSet) then
     begin
-      FNewDataSet.Fields[i].Value := DataSet.Fields[i].NewValue;
-      FOldDataSet.Fields[i].Value := null;
+      FNewDataSet.Append;
+      FOldDataSet.Append;
+      for i:=0 to DataSet.Fields.Count-1 do
+      begin
+        FNewDataSet.Fields[i].Value := DataSet.Fields[i].NewValue;
+        FOldDataSet.Fields[i].Value := null;
+      end;
+      FOldDataSet.FieldByName('DataState').Asinteger:=ord(FDataState);
+      FOldDataSet.Post;
+      FNewDataSet.Post;
     end;
-    FOldDataSet.FieldByName('DataState').Asinteger:=ord(FDataState);
-    FOldDataSet.Post;
-    FNewDataSet.Post;
   end;
 end;
 
@@ -183,16 +197,19 @@ var
 begin
   if Foldvalue<>nil then
   begin
-    FNewDataSet.Append;
-    FOldDataSet.Append;
-    for i:=0 to DataSet.Fields.Count-1 do
+    if Assigned(FNewDataSet) and Assigned(FOldDataSet) then
     begin
-      FNewDataSet.Fields[i].Value := DataSet.Fields[i].NewValue;
-      FOldDataSet.Fields[i].Value := Foldvalue[i];
-      FOldDataSet.FieldByName('DataState').Asinteger:=ord(FDataState);
+      FNewDataSet.Append;
+      FOldDataSet.Append;
+      for i:=0 to DataSet.Fields.Count-1 do
+      begin
+        FNewDataSet.Fields[i].Value := DataSet.Fields[i].NewValue;
+        FOldDataSet.Fields[i].Value := Foldvalue[i];
+        FOldDataSet.FieldByName('DataState').Asinteger:=ord(FDataState);
+      end;
+      FNewDataSet.Post;
+      FOldDataSet.Post;
     end;
-    FNewDataSet.Post;
-    FOldDataSet.Post;
   end;
 end;
 
@@ -202,15 +219,18 @@ begin
   begin
     if not (csDesigning in ComponentState) then
     begin
-      FBeforeEdit:=FDataSet.BeforeEdit;
-      FBeforeDelete:=FDataSet.BeforeDelete;
-      FBeforeInsert:=FDataSet.BeforeInsert;
-      FAfterPost:=FDataSet.AfterPost;
-      FDataSet.BeforeEdit:=@BeforeEdits;
-      FDataSet.BeforeDelete:=@BeforeDeletes;
-      FDataSet.BeforeInsert:=@BeforeInserts;
-      FDataSet.AfterPost:=@AfterPosts;
-      CreateMonitorDataSet;
+      if FDataSet.Active then
+      begin
+        FBeforeEdit:=FDataSet.BeforeEdit;
+        FBeforeDelete:=FDataSet.BeforeDelete;
+        FBeforeInsert:=FDataSet.BeforeInsert;
+        FAfterPost:=FDataSet.AfterPost;
+        FDataSet.BeforeEdit:=@BeforeEdits;
+        FDataSet.BeforeDelete:=@BeforeDeletes;
+        FDataSet.BeforeInsert:=@BeforeInserts;
+        FDataSet.AfterPost:=@AfterPosts;
+        CreateMonitorDataSet;
+      end;
     end;
   end
   else
@@ -283,7 +303,7 @@ var
   end;
 begin
   Result := '';
-  if Assigned(FNewDataSet) then
+  if Assigned(FNewDataSet) and (Assigned(FOldDataSet)) then
   begin
     if (FNewDataSet.RecordCount>0) then
     begin
@@ -343,11 +363,10 @@ begin
         begin
           Result :=Result+ 'DELETE FROM ' + ATableName + ' WHERE ' + MakeWhere(FNewDataSet)+LineEnding;
         end;
-
         FOldDataSet.Next;
         FNewDataSet.Next;
       end;
-      CreateMonitorDataSet;
+      CreateMonitorDataSet;//生成后清空 FOldDataSet 、FNewDataSet，并重新生成FOldDataSet 、FNewDataSet
     end;
   end;
 end;
