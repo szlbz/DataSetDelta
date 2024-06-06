@@ -1,7 +1,8 @@
 {*******************************************************}
 {                                                       }
 { 为lazarus TDataSet增加类似TClientDataSet的Delta功能   }
-{                    适用于所有TDataSet                 }
+{       根据TDataSet的变化直接生成对应的SQL             }
+{                 适用于所有TDataSet                    }
 {                                                       }
 {                                                       }
 {               Copyright(c) 2024-2024                  }
@@ -48,7 +49,7 @@ type
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
     function GetActionSQL(const ATableName : String; const AKeyFields: String = ''): String;
-    procedure ActivateMonitoring(AValue:Boolean =true);
+    procedure ActivateMonitoring(AValue : Boolean = True);
     property Changed:Boolean read GetChanged;
     property DataSet:TDataSet read FDataSet write SetDataSet;
   end;
@@ -63,6 +64,7 @@ end;
 destructor TDataSetChangesMonitor.Destroy;
 begin
   inherited Destroy;
+
   FBeforeEdit:=nil;
   FBeforeDelete:=nil;
   FBeforeInsert:=nil;
@@ -194,7 +196,7 @@ begin
   end;
 end;
 
-procedure TDataSetChangesMonitor.ActivateMonitoring(AValue:Boolean =true);
+procedure TDataSetChangesMonitor.ActivateMonitoring(AValue : Boolean = True);
 begin
   if AValue then
   begin
@@ -231,13 +233,13 @@ var
   nFldOrder: integer;
   cFldName, s1, s2: String;
 
-  function SQLValue(const ADataSet: TBufDataSet; AOrder: Integer): String;
+  function SQLValue(const ADataSet: TBufDataSet; AFieldIndex: Integer): String;
   var
     cValue: String;
     eType: TFieldType;
   begin
-    eType := ADataSet.Fields[AOrder].DataType;
-    cValue := ADataSet.Fields[AOrder].Value;
+    eType := ADataSet.Fields[AFieldIndex].DataType;
+    cValue := ADataSet.Fields[AFieldIndex].Value;
     if eType in [ftString, ftDate, ftTime, ftDateTime,
       ftFixedChar, ftWideString] then
     begin
