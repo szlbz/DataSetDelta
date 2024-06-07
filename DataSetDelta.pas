@@ -27,7 +27,7 @@ type
   TDataStateValue = (dsvOriginal, dsvDeleted, dsvInserted, dsvUpdated);
   TDataStateValues=set of TDataStateValue;
 
-  TDataSetChangesMonitor =class(TComponent)
+  TQFDataSetMonitor =class(TComponent)
   private
     FDataState:TDataStateValue;
     Foldvalue:array of Variant;
@@ -67,17 +67,17 @@ implementation
 
 procedure Register;
 begin
-  RegisterComponents('Data Access', [TDataSetChangesMonitor]);
+  RegisterComponents('Data Access', [TQFDataSetMonitor]);
 end;
 
-constructor TDataSetChangesMonitor.Create(AOwner: TComponent);
+constructor TQFDataSetMonitor.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   FDataSet:=nil;
   FActive:=True;
 end;
 
-destructor TDataSetChangesMonitor.Destroy;
+destructor TQFDataSetMonitor.Destroy;
 begin
   inherited Destroy;
 
@@ -92,7 +92,7 @@ begin
     freeandnil(FOldDataSet);
 end;
 
-function TDataSetChangesMonitor.GetChanged:Boolean;
+function TQFDataSetMonitor.GetChanged:Boolean;
 begin
   if Assigned(FOldDataSet) then
     Result:=FOldDataSet.RecordCount>0
@@ -100,14 +100,14 @@ begin
     Result:=false;
 end;
 
-procedure TDataSetChangesMonitor.SetActive(AValue: Boolean);
+procedure TQFDataSetMonitor.SetActive(AValue: Boolean);
 begin
   if (AValue <> FActive) then
     FActive:=AValue;
   ActivateMonitoring(FActive);
 end;
 
-procedure TDataSetChangesMonitor.SetDataSet(AValue: TDataSet);
+procedure TQFDataSetMonitor.SetDataSet(AValue: TDataSet);
 begin
   if (AValue <> FDataSet) then
   begin
@@ -117,7 +117,7 @@ begin
   end;
 end;
 
-procedure TDataSetChangesMonitor.CreateMonitorDataSet;
+procedure TQFDataSetMonitor.CreateMonitorDataSet;
 var
   i:integer;
   LFieldName, LFieldType: string;
@@ -169,7 +169,7 @@ begin
   end;
 end;
 
-procedure TDataSetChangesMonitor.BeforeInserts(DataSet: TDataSet);
+procedure TQFDataSetMonitor.BeforeInserts(DataSet: TDataSet);
 var
   i:integer;
 begin
@@ -181,7 +181,7 @@ begin
   end;
 end;
 
-procedure TDataSetChangesMonitor.BeforeEdits(DataSet: TDataSet);
+procedure TQFDataSetMonitor.BeforeEdits(DataSet: TDataSet);
 var
   i:integer;
 begin
@@ -193,7 +193,7 @@ begin
   end;
 end;
 
-procedure TDataSetChangesMonitor.BeforeDeletes(DataSet: TDataSet);
+procedure TQFDataSetMonitor.BeforeDeletes(DataSet: TDataSet);
 var
   i:integer;
 begin
@@ -216,7 +216,7 @@ begin
   end;
 end;
 
-procedure TDataSetChangesMonitor.AfterPosts(DataSet: TDataSet);
+procedure TQFDataSetMonitor.AfterPosts(DataSet: TDataSet);
 var
   i:integer;
   s:string;
@@ -239,7 +239,7 @@ begin
   end;
 end;
 
-procedure TDataSetChangesMonitor.ActivateMonitoring(AValue : Boolean = True);
+procedure TQFDataSetMonitor.ActivateMonitoring(AValue : Boolean = True);
 begin
   if AValue then
   begin
@@ -273,7 +273,7 @@ begin
   end;
 end;
 
-function TDataSetChangesMonitor.GetActionSQL(const ATableName
+function TQFDataSetMonitor.GetActionSQL(const ATableName
   : String; const AKeyFields: String = ''): String;
 var
   nFldOrder: integer;
