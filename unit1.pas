@@ -15,13 +15,16 @@ type
   TForm1 = class(TForm)
     BufDataset1: TBufDataset;
     BufDataset2: TBufDataset;
+    Button1: TButton;
     Button2: TButton;
     Button3: TButton;
+    DataSetChangesMonitor1: TDataSetChangesMonitor;
     DataSource1: TDataSource;
     DataSource2: TDataSource;
     DBGrid1: TDBGrid;
     DBGrid2: TDBGrid;
     Memo1: TMemo;
+    procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -47,9 +50,23 @@ var sql:string;
 begin
   if BufDataset1.State in [dsEdit, dsInsert] then
     BufDataset1.Post;
-  sql:=dcm1.GetActionSQL('test');
+  sql:=DataSetChangesMonitor1.GetActionSQL('test');
   if sql<>'' then
     memo1.Lines.Add(sql);
+end;
+
+procedure TForm1.Button1Click(Sender: TObject);
+begin
+  if DataSetChangesMonitor1.Active then
+  begin
+  DataSetChangesMonitor1.Active:=false;
+  Button1.caption:='开启监控';
+  end
+  else
+  begin
+    DataSetChangesMonitor1.Active:=true;
+    Button1.caption:='停止监控';
+  end;
 end;
 
 procedure TForm1.Button3Click(Sender: TObject);
@@ -95,14 +112,15 @@ begin
   BufDataset2.CreateDataset;
 
   memo1.Lines.Clear;
-  BufDataset2.Open;
   BufDataset1.Open;
+  BufDataset2.Open;
 
   dcm1:=TDataSetChangesMonitor.Create(self);
   dcm2:=TDataSetChangesMonitor.Create(self);
-  dcm1.DataSet:=BufDataset1; //监控BufDataset1的数据变化
+  //dcm1.DataSet:=BufDataset1; //监控BufDataset1的数据变化
   dcm2.DataSet:=BufDataset2; //监控BufDataset2的数据变化
-  dcm1.ActivateMonitoring(true);
+  DataSetChangesMonitor1.Active:=true;
+  //DataSetChangesMonitor1.ActivateMonitoring(true);
   dcm2.ActivateMonitoring;
 end;
 

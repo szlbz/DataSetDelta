@@ -59,24 +59,38 @@ object Form1: TForm1
     TabOrder = 4
     OnClick = Button3Click
   end
-  object DataSource1: TDataSource
+  object Button1: TButton
+    Left = 318
+    Height = 38
+    Top = 15
+    Width = 113
+    Caption = '停止监控'
+    TabOrder = 5
+    OnClick = Button1Click
+  end
+  object DataSetChangesMonitor1: TDataSetChangesMonitor
     DataSet = BufDataset1
     Left = 488
-    Top = 32
+    Top = 304
+  end
+  object DataSource1: TDataSource
+    DataSet = BufDataset1
+    Left = 350
+    Top = 30
   end
   object BufDataset1: TBufDataset
     FieldDefs = <>
-    Left = 348
-    Top = 37
+    Left = 471
+    Top = 35
   end
   object BufDataset2: TBufDataset
     FieldDefs = <>
-    Left = 464
-    Top = 181
+    Left = 594
+    Top = 42
   end
   object DataSource2: TDataSource
     DataSet = BufDataset2
-    Left = 604
-    Top = 176
+    Left = 369
+    Top = 131
   end
 end

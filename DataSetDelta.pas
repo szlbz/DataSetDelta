@@ -38,8 +38,10 @@ type
     FNewDataSet:TBufDataSet;
     FOldDataSet:TBufDataSet;
     FDataSet:TDataSet;
+    FActive:Boolean;
     procedure CreateMonitorDataSet;
     procedure SetDataSet(AValue: TDataSet);
+    procedure SetActive(AValue: Boolean);
     procedure BeforeInserts(DataSet: TDataSet);
     procedure BeforeEdits(DataSet: TDataSet);
     procedure BeforeDeletes(DataSet:TDataSet);
@@ -51,14 +53,28 @@ type
     function GetActionSQL(const ATableName : String; const AKeyFields: String = ''): String;
     procedure ActivateMonitoring(AValue : Boolean = True);
     property Changed:Boolean read GetChanged;
-    property DataSet:TDataSet read FDataSet write SetDataSet;
+    property Active:Boolean read FActive write SetActive;
+ published
+   property DataSet:TDataSet read FDataSet write SetDataSet;
   end;
 
+
+procedure Register;
+
 implementation
+
+//{$R *.res}
+
+procedure Register;
+begin
+  RegisterComponents('Data Access', [TDataSetChangesMonitor]);
+end;
 
 constructor TDataSetChangesMonitor.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
+  FDataSet:=nil;
+  FActive:=True;
 end;
 
 destructor TDataSetChangesMonitor.Destroy;
@@ -78,7 +94,17 @@ end;
 
 function TDataSetChangesMonitor.GetChanged:Boolean;
 begin
-  Result:=FOldDataSet.RecordCount>0;
+  if Assigned(FOldDataSet) then
+    Result:=FOldDataSet.RecordCount>0
+  else
+    Result:=false;
+end;
+
+procedure TDataSetChangesMonitor.SetActive(AValue: Boolean);
+begin
+  if (AValue <> FActive) then
+    FActive:=AValue;
+  ActivateMonitoring(FActive);
 end;
 
 procedure TDataSetChangesMonitor.SetDataSet(AValue: TDataSet);
