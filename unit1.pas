@@ -91,7 +91,7 @@ begin
     BufDataset1.Post;
   if BufDataset2.State in [dsEdit, dsInsert] then
     BufDataset2.Post;
-  if (dcm1.Changed) or (dcm2.Changed) then
+  if (DataSetChangesMonitor1.Changed) or (dcm2.Changed) then
   begin
     if application.MessageBox('数据有变化，是否退出？', '注意', MB_YESNO) = IDNO then
       CanClose:=false;
@@ -101,21 +101,22 @@ end;
 procedure TForm1.FormCreate(Sender: TObject);
 begin
   BufDataset1.FieldDefs.Clear;
-  BufDataset1.FieldDefs.Add('test1', TFieldType(GetEnumValue(TypeInfo(TFieldType), 'ftString')), 30);
-  BufDataset1.FieldDefs.Add('test2', TFieldType(GetEnumValue(TypeInfo(TFieldType), 'ftinteger')));
+  BufDataset1.FieldDefs.Add('vstr', TFieldType(GetEnumValue(TypeInfo(TFieldType), 'ftString')), 30);
+  BufDataset1.FieldDefs.Add('vint', TFieldType(GetEnumValue(TypeInfo(TFieldType), 'ftinteger')));
+  BufDataset1.FieldDefs.Add('vfloat', TFieldType(GetEnumValue(TypeInfo(TFieldType), 'ftfloat')));
   BufDataset1.CreateDataset;
 
   BufDataset2.FieldDefs.Clear;
-  BufDataset2.FieldDefs.Add('test11', TFieldType(GetEnumValue(TypeInfo(TFieldType), 'ftString')), 30);
-  BufDataset2.FieldDefs.Add('test12', TFieldType(GetEnumValue(TypeInfo(TFieldType), 'ftinteger')));
-  BufDataset2.FieldDefs.Add('test13', TFieldType(GetEnumValue(TypeInfo(TFieldType), 'ftinteger')));
+  BufDataset2.FieldDefs.Add('vstr1', TFieldType(GetEnumValue(TypeInfo(TFieldType), 'ftString')), 30);
+  BufDataset2.FieldDefs.Add('vint1', TFieldType(GetEnumValue(TypeInfo(TFieldType), 'ftinteger')));
+  BufDataset2.FieldDefs.Add('vint2', TFieldType(GetEnumValue(TypeInfo(TFieldType), 'ftinteger')));
   BufDataset2.CreateDataset;
 
   memo1.Lines.Clear;
   BufDataset1.Open;
   BufDataset2.Open;
 
-  dcm1:=TDataSetChangesMonitor.Create(self);
+  //dcm1:=TDataSetChangesMonitor.Create(self);
   dcm2:=TDataSetChangesMonitor.Create(self);
   //dcm1.DataSet:=BufDataset1; //监控BufDataset1的数据变化
   dcm2.DataSet:=BufDataset2; //监控BufDataset2的数据变化
