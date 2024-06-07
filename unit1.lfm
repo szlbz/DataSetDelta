@@ -29,7 +29,9 @@ object Form1: TForm1
     Lines.Strings = (
       'Memo1'
     )
+    ScrollBars = ssAutoBoth
     TabOrder = 1
+    WordWrap = False
   end
   object Button2: TButton
     Left = 72
@@ -43,7 +45,7 @@ object Form1: TForm1
   object DBGrid2: TDBGrid
     Left = 72
     Height = 218
-    Top = 368
+    Top = 365
     Width = 730
     Color = clWindow
     Columns = <>
@@ -69,28 +71,58 @@ object Form1: TForm1
     OnClick = Button1Click
   end
   object DataSource1: TDataSource
-    DataSet = BufDataset1
-    Left = 350
-    Top = 30
-  end
-  object BufDataset1: TBufDataset
-    FieldDefs = <>
-    Left = 471
-    Top = 35
+    DataSet = ZQuery1
+    Left = 328
+    Top = 296
   end
   object BufDataset2: TBufDataset
     FieldDefs = <>
-    Left = 594
-    Top = 42
+    Left = 424
+    Top = 296
   end
   object DataSource2: TDataSource
     DataSet = BufDataset2
-    Left = 369
-    Top = 131
+    Left = 696
+    Top = 8
   end
-  object DataSetChangesMonitor1: TDataSetChangesMonitor
-    DataSet = BufDataset1
-    Left = 488
-    Top = 300
+  object QFDataSetMonitor1: TQFDataSetMonitor
+    DataSet = ZQuery1
+    Left = 584
+    Top = 112
+  end
+  object ZConnection1: TZConnection
+    ControlsCodePage = cCP_UTF8
+    Properties.Strings = (
+      'codepage='
+      'controls_cp=CP_UTF8'
+      'AutoEncodeStrings=True'
+    )
+    Port = 0
+    Protocol = 'sqlite'
+    Left = 784
+    Top = 112
+  end
+  object SQLite3Connection1: TSQLite3Connection
+    Connected = False
+    LoginPrompt = False
+    DatabaseName = 'demo3.db3'
+    KeepConnection = False
+    Password = '123456'
+    Transaction = SQLTransaction1
+    AlwaysUseBigint = False
+    Left = 768
+    Top = 16
+  end
+  object SQLTransaction1: TSQLTransaction
+    Active = False
+    Database = SQLite3Connection1
+    Left = 696
+    Top = 112
+  end
+  object ZQuery1: TZQuery
+    Connection = ZConnection1
+    Params = <>
+    Left = 584
+    Top = 8
   end
 end
