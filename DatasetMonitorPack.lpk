@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <Package Version="5">
+    <PathDelim Value="\"/>
+    <Name Value="DatasetMonitorPack"/>
+    <Type Value="RunAndDesignTime"/>
+    <CompilerOptions>
+      <Version Value="11"/>
+      <PathDelim Value="\"/>
+      <SearchPaths>
+        <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
+      </SearchPaths>
+    </CompilerOptions>
+    <Description Value="为lazarus TDataSet增加类似TClientDataSet的Delta功能
+根据TDataSet的变化直接生成对应的SQL
+适用于所有TDataSet
+
+Copyright(c) 2024-2024
+秋风(QQ315795176)原创出品
+All rights reserved
+保留所有权利 
+"/>
+    <Version Minor="1"/>
+    <Files>
+      <Item>
+        <Filename Value="DataSetDelta.pas"/>
+        <HasRegisterProc Value="True"/>
+        <UnitName Value="DataSetDelta"/>
+      </Item>
+    </Files>
+    <RequiredPkgs>
+      <Item>
+        <PackageName Value="FCL"/>
+      </Item>
+    </RequiredPkgs>
+    <UsageOptions>
+      <UnitPath Value="$(PkgOutDir)"/>
+    </UsageOptions>
+    <PublishOptions>
+      <Version Value="2"/>
+      <UseFileFilters Value="True"/>
+    </PublishOptions>
+  </Package>
+</CONFIG>

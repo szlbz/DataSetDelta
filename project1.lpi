@@ -26,7 +26,7 @@
     </RunParams>
     <RequiredPackages>
       <Item>
-        <PackageName Value="DataSetChangesMonitorPackage"/>
+        <PackageName Value="DatasetMonitorPack"/>
       </Item>
       <Item>
         <PackageName Value="FCL"/>
