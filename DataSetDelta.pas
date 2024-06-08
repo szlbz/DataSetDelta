@@ -47,16 +47,16 @@ type
     procedure BeforeDeletes(DataSet:TDataSet);
     procedure AfterPosts(DataSet: TDataSet);
     function GetChanged:Boolean;
+    procedure ActivateMonitoring(AValue : Boolean = True);
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
     function GetActionSQL(const ATableName : String; const AKeyFields: String = ''): String;
-    procedure ActivateMonitoring(AValue : Boolean = True);
     property Changed:Boolean read GetChanged;
     property Active:Boolean read FActive write SetActive;
  published
    property DataSet:TDataSet read FDataSet write SetDataSet;
-  end;
+ end;
 
 
 procedure Register;
@@ -73,8 +73,7 @@ end;
 constructor TQFDataSetMonitor.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
-  FDataSet:=nil;
-  FActive:=True;
+  FActive := False;
 end;
 
 destructor TQFDataSetMonitor.Destroy;
@@ -87,9 +86,9 @@ begin
   FAfterPost:=nil;
   Foldvalue:=nil;
   if Assigned(FNewDataSet) then
-    freeandnil(FNewDataSet);
+    FreeAndNil(FNewDataSet);
   if Assigned(FOldDataSet) then
-    freeandnil(FOldDataSet);
+    FreeAndNil(FOldDataSet);
 end;
 
 function TQFDataSetMonitor.GetChanged:Boolean;
@@ -123,6 +122,8 @@ var
   LFieldName, LFieldType: string;
   LFieldSize : Integer;
 begin
+  if FDataSet.Fields.Count>0 then
+  begin
   if Foldvalue<>nil then Foldvalue:=nil;
   try
     setlength(Foldvalue,FDataSet.Fields.Count);
@@ -131,10 +132,9 @@ begin
   end;
 
   if Assigned(FNewDataSet) then
-    freeandnil(FNewDataSet);
+    FreeAndNil(FNewDataSet);
   if Assigned(FOldDataSet) then
-    freeandnil(FOldDataSet);
-
+    FreeAndNil(FOldDataSet);
   try
     FNewDataSet:=TBufDataSet.Create(nil);
   finally
@@ -167,6 +167,8 @@ begin
     FOldDataSet.FieldDefs.Add('DataState', TFieldType(GetEnumValue(TypeInfo(TFieldType), 'ftinteger')));
     FOldDataSet.CreateDataset;
   end;
+  end;
+
 end;
 
 procedure TQFDataSetMonitor.BeforeInserts(DataSet: TDataSet);
@@ -245,7 +247,8 @@ begin
   begin
     if not (csDesigning in ComponentState) then
     begin
-      if FDataSet.Active then
+      if Assigned(FDataSet) then
+      //if FDataSet.Active then
       begin
         FBeforeEdit:=FDataSet.BeforeEdit;
         FBeforeDelete:=FDataSet.BeforeDelete;
@@ -267,9 +270,9 @@ begin
     FAfterPost:=nil;
     Foldvalue:=nil;
     if Assigned(FNewDataSet) then
-      freeandnil(FNewDataSet);
+      FreeAndNil(FNewDataSet);
     if Assigned(FOldDataSet) then
-      freeandnil(FOldDataSet);
+      FreeAndNil(FOldDataSet);
   end;
 end;
 
