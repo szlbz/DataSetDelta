@@ -116,7 +116,7 @@ begin
 
   dcm2:=TQFDataSetMonitor.Create(self);
   dcm2.DataSet:=BufDataset2; //监控BufDataset2的数据变化
-  dcm2.ActivateMonitoring;
+  dcm2.Active:=true;//.ActivateMonitoring;
 
   {$ifdef linux}
   SQLiteLibraryName:=ExtractFilePath(Application.ExeName)+'libsqlite3.so';
