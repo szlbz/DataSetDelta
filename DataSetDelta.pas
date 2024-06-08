@@ -63,7 +63,7 @@ procedure Register;
 
 implementation
 
-//{$R *.res}
+{$R *.res}
 
 procedure Register;
 begin
