@@ -35,7 +35,7 @@ type
     FBeforeDelete: TDataSetNotifyEvent;
     FBeforeInsert: TDataSetNotifyEvent;
     FAfterPost: TDataSetNotifyEvent;
-    FAfterOpens: TDataSetNotifyEvent;
+    FAfterOpen: TDataSetNotifyEvent;
     FNewDataSet:TBufDataSet;
     FOldDataSet:TBufDataSet;
     FDataSet:TDataSet;
@@ -55,8 +55,8 @@ type
     destructor Destroy; override;
     function GetActionSQL(const ATableName : String; const AKeyFields: String = ''): String;
     property Changed:Boolean read GetChanged;
-    property Active:Boolean read FActive write SetActive;
  published
+   property Active:Boolean read FActive write SetActive;
    property DataSet:TDataSet read FDataSet write SetDataSet;
  end;
 
@@ -113,6 +113,27 @@ begin
   if (AValue <> FDataSet) then
   begin
     FDataSet:=AValue;
+    if FActive then
+    begin
+    FBeforeEdit:=FDataSet.BeforeEdit;
+      FBeforeDelete:=FDataSet.BeforeDelete;
+      FBeforeInsert:=FDataSet.BeforeInsert;
+      FAfterPost:=FDataSet.AfterPost;
+      FDataSet.BeforeEdit:=@BeforeEdits;
+      FDataSet.BeforeDelete:=@BeforeDeletes;
+      FDataSet.BeforeInsert:=@BeforeInserts;
+      FDataSet.AfterPost:=@AfterPosts;
+      FDataSet.AfterOpen:=@AfterOpens;
+    end
+    else
+    begin
+      FBeforeEdit:=nil;
+      FBeforeDelete:=nil;
+      FBeforeInsert:=nil;
+      FAfterPost:=nil;
+      FAfterOpen:=nil;
+      Foldvalue:=nil;
+    end;
   end;
 end;
 
@@ -273,6 +294,7 @@ begin
     FBeforeDelete:=nil;
     FBeforeInsert:=nil;
     FAfterPost:=nil;
+    FAfterOpen:=nil;
     Foldvalue:=nil;
     if Assigned(FNewDataSet) then
       FreeAndNil(FNewDataSet);
