@@ -35,6 +35,7 @@ type
     FBeforeDelete: TDataSetNotifyEvent;
     FBeforeInsert: TDataSetNotifyEvent;
     FAfterPost: TDataSetNotifyEvent;
+    FAfterOpens: TDataSetNotifyEvent;
     FNewDataSet:TBufDataSet;
     FOldDataSet:TBufDataSet;
     FDataSet:TDataSet;
@@ -46,6 +47,7 @@ type
     procedure BeforeEdits(DataSet: TDataSet);
     procedure BeforeDeletes(DataSet:TDataSet);
     procedure AfterPosts(DataSet: TDataSet);
+    procedure AfterOpens(DataSet: TDataSet);
     function GetChanged:Boolean;
     procedure ActivateMonitoring(AValue : Boolean = True);
   public
@@ -111,8 +113,6 @@ begin
   if (AValue <> FDataSet) then
   begin
     FDataSet:=AValue;
-    if not (csDesigning in ComponentState) then
-      CreateMonitorDataSet;
   end;
 end;
 
@@ -241,6 +241,11 @@ begin
   end;
 end;
 
+procedure TQFDataSetMonitor.AfterOpens(DataSet: TDataSet);
+begin
+  CreateMonitorDataSet;
+end;
+
 procedure TQFDataSetMonitor.ActivateMonitoring(AValue : Boolean = True);
 begin
   if AValue then
@@ -248,7 +253,6 @@ begin
     if not (csDesigning in ComponentState) then
     begin
       if Assigned(FDataSet) then
-      //if FDataSet.Active then
       begin
         FBeforeEdit:=FDataSet.BeforeEdit;
         FBeforeDelete:=FDataSet.BeforeDelete;
@@ -258,6 +262,7 @@ begin
         FDataSet.BeforeDelete:=@BeforeDeletes;
         FDataSet.BeforeInsert:=@BeforeInserts;
         FDataSet.AfterPost:=@AfterPosts;
+        FDataSet.AfterOpen:=@AfterOpens;
         CreateMonitorDataSet;
       end;
     end;
