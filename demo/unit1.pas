@@ -136,11 +136,18 @@ begin
   ZConnection1.Database:='demo.db3';
   ZConnection1.Password:='123asd';
   ZConnection1.Connect;
-  QFDataSetMonitor1.Active:=true;
+  //QFDataSetMonitor1.Active:=true;
   ZQuery1.Close;
   ZQuery1.SQL.Text:='select * from hardware';
   ZQuery1.Open;
-
+  if QFDataSetMonitor1.Active then
+  begin
+    Button1.caption:='停止监控';
+  end
+  else
+  begin
+    Button1.caption:='开启监控';
+  end;
 end;
 
 end.
