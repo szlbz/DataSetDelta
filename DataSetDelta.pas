@@ -119,6 +119,7 @@ begin
       FBeforeDelete:=FDataSet.BeforeDelete;
       FBeforeInsert:=FDataSet.BeforeInsert;
       FAfterPost:=FDataSet.AfterPost;
+      FAfterOpen:=FDataSet.AfterOpen;
       FDataSet.BeforeEdit:=@BeforeEdits;
       FDataSet.BeforeDelete:=@BeforeDeletes;
       FDataSet.BeforeInsert:=@BeforeInserts;
@@ -279,6 +280,7 @@ begin
         FBeforeDelete:=FDataSet.BeforeDelete;
         FBeforeInsert:=FDataSet.BeforeInsert;
         FAfterPost:=FDataSet.AfterPost;
+        FAfterOpen:=FDataSet.AfterOpen;
         FDataSet.BeforeEdit:=@BeforeEdits;
         FDataSet.BeforeDelete:=@BeforeDeletes;
         FDataSet.BeforeInsert:=@BeforeInserts;
