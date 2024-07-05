@@ -1,16 +1,11 @@
 {*******************************************************}  
-{                                                       }  
 { 为lazarus TDataSet增加类似TClientDataSet的Delta功能   }  
 {       根据TDataSet的变化直接生成对应的SQL             }  
 {                 适用于所有TDataSet                    }  
-{                                                       }  
-{                                                       }  
 {               Copyright(c) 2024-2024                  }  
 {              秋风(QQ315795176)原创出品                }  
-{                                                       }  
 {                 All rights reserved                   }  
 {                     保留所有权利                      }  
-{                                                       }  
 { 感谢ccc(QQ1650680975)为delphi unidac 增加类似         }  
 { TClientDataSet的Delta功能                             }  
 { 可按此方法修改内存表为friedac                         }  
