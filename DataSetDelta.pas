@@ -11,16 +11,29 @@
 {                 All rights reserved                   }
 {                     保留所有权利                      }
 {                                                       }
+{ 感谢ccc(QQ1650680975)为delphi unidac 增加类似         }
+{ TClientDataSet的Delta功能                             }
+{ 可按此方法修改内存表为friedac                         }
+{ https://gitee.com/cityboat888/DataSetDelta.git        }
 {*******************************************************}
 
 unit DataSetDelta;
 
-{$mode objfpc}{$H+}
+{$IFDEF FPC}
+  {$mode objfpc}{$H+}
+{$ELSE}
+{$ENDIF}
 
 interface
 
 uses
-  Classes, SysUtils, BufDataset, DB, TypInfo, Variants;
+  Classes, SysUtils, DB, TypInfo, Variants,
+  {$IFDEF FPC}
+    BufDataset
+  {$ELSE}
+    VirtualTable
+  {$ENDIF}
+  ;
 
 type
 
@@ -36,8 +49,9 @@ type
     FBeforeInsert: TDataSetNotifyEvent;
     FAfterPost: TDataSetNotifyEvent;
     FAfterOpen: TDataSetNotifyEvent;
-    FNewDataSet:TBufDataSet;
-    FOldDataSet:TBufDataSet;
+
+    FNewDataSet:{$IFDEF FPC} TBufDataSet{$ELSE}TVirtualTable{$ENDIF};
+    FOldDataSet:{$IFDEF FPC} TBufDataSet{$ELSE}TVirtualTable{$ENDIF};
     FDataSet:TDataSet;
     FActive:Boolean;
     procedure CreateMonitorDataSet;
@@ -59,6 +73,13 @@ type
    property Active:Boolean read FActive write SetActive;
    property DataSet:TDataSet read FDataSet write SetDataSet;
  end;
+
+{$IFDEF FPC}
+
+{$ELSE}
+ const
+   LineEnding = #13#10;
+{$ENDIF}
 
 
 procedure Register;
@@ -115,16 +136,16 @@ begin
     FDataSet:=AValue;
     if FActive then
     begin
-    FBeforeEdit:=FDataSet.BeforeEdit;
+      FBeforeEdit:=FDataSet.BeforeEdit;
       FBeforeDelete:=FDataSet.BeforeDelete;
       FBeforeInsert:=FDataSet.BeforeInsert;
       FAfterPost:=FDataSet.AfterPost;
       FAfterOpen:=FDataSet.AfterOpen;
-      FDataSet.BeforeEdit:=@BeforeEdits;
-      FDataSet.BeforeDelete:=@BeforeDeletes;
-      FDataSet.BeforeInsert:=@BeforeInserts;
-      FDataSet.AfterPost:=@AfterPosts;
-      FDataSet.AfterOpen:=@AfterOpens;
+      FDataSet.BeforeEdit:={$IFDEF FPC}@{$endif}BeforeEdits;
+      FDataSet.BeforeDelete:={$IFDEF FPC}@{$endif}BeforeDeletes;
+      FDataSet.BeforeInsert:={$IFDEF FPC}@{$endif}BeforeInserts;
+      FDataSet.AfterPost:={$IFDEF FPC}@{$endif}AfterPosts;
+      FDataSet.AfterOpen:={$IFDEF FPC}@{$endif}AfterOpens;
     end
     else
     begin
@@ -133,7 +154,6 @@ begin
       FBeforeInsert:=nil;
       FAfterPost:=nil;
       FAfterOpen:=nil;
-      Foldvalue:=nil;
     end;
   end;
 end;
@@ -146,49 +166,65 @@ var
 begin
   if FDataSet.Fields.Count>0 then
   begin
-  if Foldvalue<>nil then Foldvalue:=nil;
-  try
-    setlength(Foldvalue,FDataSet.Fields.Count);
-  except
-    exit;
-  end;
+    if Foldvalue<>nil then Foldvalue:=nil;
+    try
+      setlength(Foldvalue,FDataSet.Fields.Count);
+    except
+      exit;
+    end;
 
-  if Assigned(FNewDataSet) then
-    FreeAndNil(FNewDataSet);
-  if Assigned(FOldDataSet) then
-    FreeAndNil(FOldDataSet);
-  try
-    FNewDataSet:=TBufDataSet.Create(nil);
-  finally
-    for I := 0 to FDataSet.FieldCount - 1 do
-    begin
-      LFieldName := FDataSet.Fields[I].FieldName;
-      LFieldType := GetEnumName(TypeInfo(TFieldType), Integer(FDataSet.Fields[I].DataType));
-      LFieldSize := FDataSet.Fields[I].DataSize;
-      if (LFieldType = 'ftString') then
-        FNewDataSet.FieldDefs.Add(LFieldName, TFieldType(GetEnumValue(TypeInfo(TFieldType), LFieldType)), LFieldSize)
-      else
-        FNewDataSet.FieldDefs.Add(LFieldName, TFieldType(GetEnumValue(TypeInfo(TFieldType), LFieldType)));
+    if Assigned(FNewDataSet) then
+      FreeAndNil(FNewDataSet);
+    if Assigned(FOldDataSet) then
+      FreeAndNil(FOldDataSet);
+    try
+      {$IFDEF FPC}
+      FNewDataSet:=TBufDataSet.Create(nil);
+      {$ELSE}
+      FNewDataSet:=TVirtualTable.Create(nil);
+      {$ENDIF}
+    finally
+      for I := 0 to FDataSet.FieldCount - 1 do
+      begin
+        LFieldName := FDataSet.Fields[I].FieldName;
+        LFieldType := GetEnumName(TypeInfo(TFieldType), Integer(FDataSet.Fields[I].DataType));
+        LFieldSize := FDataSet.Fields[I].DataSize;
+        if (LFieldType = 'ftString') then
+          FNewDataSet.FieldDefs.Add(LFieldName, TFieldType(GetEnumValue(TypeInfo(TFieldType), LFieldType)), LFieldSize)
+        else
+          FNewDataSet.FieldDefs.Add(LFieldName, TFieldType(GetEnumValue(TypeInfo(TFieldType), LFieldType)));
+      end;
+      FNewDataSet.FieldDefs.Add('DataState', TFieldType(GetEnumValue(TypeInfo(TFieldType), 'ftinteger')));
+      {$IFDEF FPC}
+      FNewDataSet.CreateDataset;
+      {$ELSE}
+      FNewDataSet.active:=true;
+      {$ENDIF}
     end;
-    FNewDataSet.FieldDefs.Add('DataState', TFieldType(GetEnumValue(TypeInfo(TFieldType), 'ftinteger')));
-    FNewDataSet.CreateDataset;
-  end;
-  try
-    FOldDataSet:=TBufDataSet.Create(nil);
-  finally
-    for I := 0 to FDataSet.FieldCount - 1 do
-    begin
-      LFieldName := FDataSet.Fields[I].FieldName;
-      LFieldType := GetEnumName(TypeInfo(TFieldType), Integer(FDataSet.Fields[I].DataType));
-      LFieldSize := FDataSet.Fields[I].DataSize;
-      if (LFieldType = 'ftString')  then
-        FOldDataSet.FieldDefs.Add(LFieldName, TFieldType(GetEnumValue(TypeInfo(TFieldType), LFieldType)), LFieldSize)
-      else
-        FOldDataSet.FieldDefs.Add(LFieldName, TFieldType(GetEnumValue(TypeInfo(TFieldType), LFieldType)));
+    try
+      {$IFDEF FPC}
+      FOldDataSet:=TBufDataSet.Create(nil);
+      {$ELSE}
+      FOldDataSet:=TVirtualTable.Create(nil);
+      {$ENDIF}
+    finally
+      for I := 0 to FDataSet.FieldCount - 1 do
+      begin
+        LFieldName := FDataSet.Fields[I].FieldName;
+        LFieldType := GetEnumName(TypeInfo(TFieldType), Integer(FDataSet.Fields[I].DataType));
+        LFieldSize := FDataSet.Fields[I].DataSize;
+        if (LFieldType = 'ftString')  then
+          FOldDataSet.FieldDefs.Add(LFieldName, TFieldType(GetEnumValue(TypeInfo(TFieldType), LFieldType)), LFieldSize)
+        else
+          FOldDataSet.FieldDefs.Add(LFieldName, TFieldType(GetEnumValue(TypeInfo(TFieldType), LFieldType)));
+      end;
+      FOldDataSet.FieldDefs.Add('DataState', TFieldType(GetEnumValue(TypeInfo(TFieldType), 'ftinteger')));
+      {$IFDEF FPC}
+      FOldDataSet.CreateDataset;
+      {$ELSE}
+      FOldDataSet.active:=true;
+      {$ENDIF}
     end;
-    FOldDataSet.FieldDefs.Add('DataState', TFieldType(GetEnumValue(TypeInfo(TFieldType), 'ftinteger')));
-    FOldDataSet.CreateDataset;
-  end;
   end;
 
 end;
@@ -281,11 +317,11 @@ begin
         FBeforeInsert:=FDataSet.BeforeInsert;
         FAfterPost:=FDataSet.AfterPost;
         FAfterOpen:=FDataSet.AfterOpen;
-        FDataSet.BeforeEdit:=@BeforeEdits;
-        FDataSet.BeforeDelete:=@BeforeDeletes;
-        FDataSet.BeforeInsert:=@BeforeInserts;
-        FDataSet.AfterPost:=@AfterPosts;
-        FDataSet.AfterOpen:=@AfterOpens;
+        FDataSet.BeforeEdit:={$IFDEF FPC}@{$endif}BeforeEdits;
+        FDataSet.BeforeDelete:={$IFDEF FPC}@{$endif}BeforeDeletes;
+        FDataSet.BeforeInsert:={$IFDEF FPC}@{$endif}BeforeInserts;
+        FDataSet.AfterPost:={$IFDEF FPC}@{$endif}AfterPosts;
+        FDataSet.AfterOpen:={$IFDEF FPC}@{$endif}AfterOpens;
         CreateMonitorDataSet;
       end;
     end;
@@ -311,7 +347,7 @@ var
   nFldOrder: integer;
   cFldName, s1, s2: String;
 
-  function SQLValue(const ADataSet: TBufDataSet; AFieldIndex: Integer): String;
+  function SQLValue(const ADataSet:  {$IFDEF FPC} TBufDataSet{$ELSE}TVirtualTable{$ENDIF}; AFieldIndex: Integer): String;
   var
     cValue: String;
     eType: TFieldType;
@@ -335,7 +371,7 @@ var
         Result := cValue;
   end;
 
-  function MakeWhere(const ADataSet: TBufDataSet): String;
+  function MakeWhere(const ADataSet: {$IFDEF FPC} TBufDataSet{$ELSE}TVirtualTable{$ENDIF}): String;
   var
     cKeyFields: String;
     i: Integer;
