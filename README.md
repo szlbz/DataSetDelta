@@ -1,3 +1,6 @@
+2024-07-04
+合并ccc(QQ1650680975)增加的delphi 12.0版（unidac）  
+  
  为lazarus TDataSet增加类似TClientDataSet的Delta功能     
        根据TDataSet的变化直接生成对应的SQL               
                  适用于所有TDataSet                     
