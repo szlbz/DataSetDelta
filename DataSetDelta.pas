@@ -27,7 +27,7 @@ unit DataSetDelta;
 interface
 
 uses
-  Classes, SysUtils, DB, TypInfo, Variants,
+  Classes, SysUtils, DB, TypInfo, Variants,base64,
   {$IFDEF FPC}
     BufDataset
   {$ELSE}
@@ -87,6 +87,22 @@ procedure Register;
 implementation
 
 {$R *.res}
+
+function StreamToBase64(const Outstream:TStream):String;
+var
+  Encoder   : TBase64EncodingStream;
+  sm: TStringStream;
+  Buffer: Pointer;
+  BufferSize, i,Count: LongInt;
+begin
+  sm:=TStringStream.Create('');
+  Outstream.Position:=0;
+  Encoder:=TBase64EncodingStream.create(sm);
+  Encoder.CopyFrom(Outstream,Outstream.Size);
+  Result:=sm.DataString;
+  Encoder.Free;
+  sm.Free;
+end;
 
 procedure Register;
 begin
@@ -349,11 +365,24 @@ var
 
   function SQLValue(const ADataSet:  {$IFDEF FPC} TBufDataSet{$ELSE}TVirtualTable{$ENDIF}; AFieldIndex: Integer): String;
   var
-    cValue: String;
+    cValue,cName: String;
     eType: TFieldType;
+    sm:TStream;
+    BlobField: TBlobField;
+    F2:TField;
   begin
     eType := ADataSet.Fields[AFieldIndex].DataType;
+    cName:= ADataSet.FieldDefs[AFieldIndex].Name;
     cValue := ADataSet.Fields[AFieldIndex].Value;
+    if eType in [ftBlob] then   //将blob转为base64
+    begin
+      sm:=TStream.Create;
+      F2:=ADataSet.FieldByName(cName);
+      TBlobField(F2).SaveToStream(sm);
+      Result :='^BLOB^.^'+ATableName+'^BLOB^#^'+StreamToBase64(sm)+'^BLOB^@^'+cName+'^BLOB^_^';
+      sm.Free;
+    end
+    else
     if eType in [ftString, ftDate, ftTime, ftDateTime,
       ftFixedChar, ftWideString] then
     begin
