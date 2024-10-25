@@ -1,4 +1,6 @@
-2024-07-04
+2024-10-25  
+高勇高老板增强了GetActionSQL功能。  
+2024-07-04  
 合并ccc(QQ1650680975)增加的delphi 12.0版（unidac）  
   
  为lazarus TDataSet增加类似TClientDataSet的Delta功能     
