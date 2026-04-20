@@ -335,6 +335,7 @@ end;
 procedure TQFDataSetMonitor.CreateMonitorDataSet;
 var
   i:integer;
+  fn:String;
   LFieldName, LFieldType: string;
   LFieldSize : Integer;
 begin
@@ -361,7 +362,7 @@ begin
       for I := 0 to FDataSet.FieldCount - 1 do
       begin
         LFieldName := FDataSet.Fields[I].FieldName;
-        LFieldType := GetEnumName(TypeInfo(TFieldType), Integer(FDataSet.Fields[I].DataType));
+        LFieldType := GetEnumName(TypeInfo(TFieldType), Integer(FDataSet.Fields[I].DataType));;
         LFieldSize := FDataSet.Fields[I].DataSize;
         //try
         //  FNewDataSet.FieldDefs.Add(LFieldName, TFieldType(GetEnumValue(TypeInfo(TFieldType), LFieldType)), LFieldSize)
@@ -390,7 +391,12 @@ begin
       for I := 0 to FDataSet.FieldCount - 1 do
       begin
         LFieldName := FDataSet.Fields[I].FieldName;
-        LFieldType := GetEnumName(TypeInfo(TFieldType), Integer(FDataSet.Fields[I].DataType));
+        //如果字段类型为：ftAutoInc，需要修改为 ftinteger 2026-04-20
+        fn:=GetEnumName(TypeInfo(TFieldType), Integer(FDataSet.Fields[I].DataType));
+        if fn='ftAutoInc' Then fn:='ftinteger';
+        LFieldType := fn;
+        //修改结束
+
         LFieldSize := FDataSet.Fields[I].DataSize;
         //try
         //  FOldDataSet.FieldDefs.Add(LFieldName, TFieldType(GetEnumValue(TypeInfo(TFieldType), LFieldType)), LFieldSize)
@@ -762,7 +768,9 @@ begin
   begin
     FDataState:=dsvUpdated;
     for i:=0 to DataSet.Fields.Count-1 do
+    begin
       Foldvalue[i]:=DataSet.Fields[i].NewValue;
+    end;
   end;
 end;
 
